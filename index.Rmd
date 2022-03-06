@@ -1,0 +1,40 @@
+--- 
+title: "Notes on 'SQL for Data Scientists' by Renee M. P. Teate"
+author: "Jake Lawler"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: jake-lawler/SQLforDataScientists
+description: "My Notes on 'SQL for Data Scientists'."
+---
+
+# Preface {-}
+
+```{r echo = FALSE, eval = FALSE}
+
+# Create a live view of the book.
+
+library(bookdown)
+serve_book(dir = ".", output_dir = "_book", preview = TRUE, in_session = TRUE, quiet = FALSE)
+
+```
+
+
+Sources used to get MySQL up-and-running from within R Markdown:
+
+The answer from 'Harley' here on connecting to MySQL:
+
+[](https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r)
+
+The reference page for RMariaDB:
+
+[](https://rmariadb.r-dbi.org/reference/index.html)
+
+The information on including SQL in R Markdown from Yihui Xie's book:
+
+[](https://bookdown.org/yihui/rmarkdown/language-engines.html#sql)
+

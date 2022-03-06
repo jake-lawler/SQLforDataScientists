@@ -1,0 +1,46 @@
+# Data Sources {#data_sources}
+
+## Chapter Notes
+
+So far I'm just testing that the connection from R Markdown works.
+
+```{r}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+Test query:
+
+```{sql connection=con}
+SELECT * FROM farmers_market.product
+```
+
+
+
+
+
+## Questions
+
+
+
+
+## Further Reading {-}
+
+
+
+```{r}
+# Disconnecting the database
+dbDisconnect(con)
+```
