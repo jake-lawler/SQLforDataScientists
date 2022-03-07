@@ -23,18 +23,49 @@ serve_book(dir = ".", output_dir = "_book", preview = TRUE, in_session = TRUE, q
 
 ```
 
+These are my notes on 'SQL for Data Scientists' by Renee M. P. Teate. I've only just started so there's not much here yet.
 
-Sources used to get MySQL up-and-running from within R Markdown:
 
-The answer from 'Harley' here on connecting to MySQL:
 
-[](https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r)
+Here are the sources I referred to to get MySQL up-and-running from within R Markdown:
 
-The reference page for RMariaDB:
+* The answer from 'Harley' [here](https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r) on connecting to MySQL.
 
-[](https://rmariadb.r-dbi.org/reference/index.html)
+* The [reference page](https://rmariadb.r-dbi.org/reference/index.html) for RMariaDB.
 
-The information on including SQL in R Markdown from Yihui Xie's book:
+* The information on including SQL in R Markdown from Yihui Xie's [R Markdown book](https://bookdown.org/yihui/rmarkdown/language-engines.html#sql).
 
-[](https://bookdown.org/yihui/rmarkdown/language-engines.html#sql)
+Here's an example of the code I'm using, I'll hide this in the future chapters:
+
+```{r}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+Test query:
+
+```{sql connection=con}
+SELECT * FROM farmers_market.product
+```
+
+
+Then disconnecting the database at the end of each chapter:
+
+```{r}
+# Disconnecting the database
+dbDisconnect(con)
+```
+
 

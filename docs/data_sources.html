@@ -24,7 +24,7 @@
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-06" />
+<meta name="date" content="2022-03-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -166,21 +166,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="chapter-notes" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Chapter Notes</h2>
 <p>So far I’m just testing that the connection from R Markdown works.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data_sources.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up </span></span>
-<span id="cb1-2"><a href="data_sources.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb1-3"><a href="data_sources.html#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="data_sources.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to the book&#39;s example MySQL database</span></span>
-<span id="cb1-5"><a href="data_sources.html#cb1-5" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RMariaDB<span class="sc">::</span><span class="fu">MariaDB</span>(), </span>
-<span id="cb1-6"><a href="data_sources.html#cb1-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">dbname =</span> <span class="st">&quot;farmers_market&quot;</span>, </span>
-<span id="cb1-7"><a href="data_sources.html#cb1-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">host =</span> <span class="st">&quot;localhost&quot;</span>, </span>
-<span id="cb1-8"><a href="data_sources.html#cb1-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">port =</span> <span class="dv">3306</span>,</span>
-<span id="cb1-9"><a href="data_sources.html#cb1-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">user =</span> <span class="st">&quot;root&quot;</span>,</span>
-<span id="cb1-10"><a href="data_sources.html#cb1-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">password =</span> keyring<span class="sc">::</span><span class="fu">key_get</span>(<span class="st">&quot;mysql&quot;</span>, <span class="st">&quot;root&quot;</span>))</span>
-<span id="cb1-11"><a href="data_sources.html#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="data_sources.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># No limit on the number of records to be displayed</span></span>
-<span id="cb1-13"><a href="data_sources.html#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(<span class="at">sql.max.print =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <p>Test query:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="data_sources.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="data_sources.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-2">Table 1.1: </span>23 records</caption>
@@ -364,8 +351,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="further-reading" class="section level2 unnumbered">
 <h2>Further Reading</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="data_sources.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnecting the database</span></span>
-<span id="cb3-2"><a href="data_sources.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
 
 </div>
 </div>

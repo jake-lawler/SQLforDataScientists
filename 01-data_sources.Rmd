@@ -4,7 +4,7 @@
 
 So far I'm just testing that the connection from R Markdown works.
 
-```{r}
+```{r echo = FALSE}
 # Setting up 
 library(DBI)
 
@@ -40,7 +40,7 @@ SELECT * FROM farmers_market.product
 
 
 
-```{r}
+```{r echo = FALSE}
 # Disconnecting the database
 dbDisconnect(con)
 ```
