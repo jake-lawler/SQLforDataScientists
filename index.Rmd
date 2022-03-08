@@ -1,5 +1,5 @@
 --- 
-title: "Notes on 'SQL for Data Scientists' by Renee M. P. Teate"
+title: "Notes on 'SQL for Data Scientists' by Renée M. P. Teate"
 author: "Jake Lawler"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -23,7 +23,7 @@ serve_book(dir = ".", output_dir = "_book", preview = TRUE, in_session = TRUE, q
 
 ```
 
-These are my notes on 'SQL for Data Scientists' by Renee M. P. Teate. I've only just started so there's not much here yet.
+These are my notes on 'SQL for Data Scientists' by Renée M. P. Teate. I've only just started so there's not much here yet.
 
 
 
@@ -35,7 +35,7 @@ Here are the sources I referred to to get MySQL up-and-running from within R Mar
 
 * The information on including SQL in R Markdown from Yihui Xie's [R Markdown book](https://bookdown.org/yihui/rmarkdown/language-engines.html#sql).
 
-Here's an example of the code I'm using, I'll hide this in the future chapters:
+Here's an example of the code I'm using to connect to the book's example database, I'll hide this in the future chapters:
 
 ```{r}
 # Setting up 
@@ -54,9 +54,9 @@ knitr::opts_knit$set(sql.max.print = NA)
 ```
 
 
-Test query:
+You can then run queries by using R Markdown's support for SQL code snippets:
 
-```{sql connection=con}
+```{sql connection=con, max.print = 10}
 SELECT * FROM farmers_market.product
 ```
 

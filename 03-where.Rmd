@@ -1,0 +1,198 @@
+# The WHERE Clause {#where}
+
+```{r echo = FALSE}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+## Chapter Notes
+
+The chapter introduces the WHERE clause, which filters the results returned by your query. For example, the following code returns rows from the product table where the product_category_id is 1:
+
+```{sql connection=con}
+SELECT product_id, product_name, product_category_id
+FROM farmers_market.product 
+WHERE product_category_id = 1
+LIMIT 5
+```
+
+We can use Boolean operators OR, AND, NOT, AND NOT, or OR NOT with the WHERE clause. For example:
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, product_id, quantity, quantity * cost_to_customer_per_qty AS price
+FROM farmers_market.customer_purchases
+WHERE customer_id = 3 OR customer_id = 4
+ORDER BY market_date, customer_id, vendor_id, product_id
+LIMIT 5
+```
+
+We can also use >, <, >=, <=.
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, product_id, quantity, quantity * cost_to_customer_per_qty AS price
+FROM farmers_market.customer_purchases
+WHERE customer_id > 2 AND customer_id <= 4 
+ORDER BY market_date, customer_id, vendor_id, product_id
+LIMIT 5
+```
+
+And we can nest operators using parentheses:
+
+```{sql connection=con}
+SELECT product_id, product_name
+FROM farmers_market.product 
+WHERE product_id = 10 
+      OR (product_id > 3 AND product_id < 8)
+```
+
+We aren't confined to filter on a single column, we could easily use the WHERE clause to return e.g. rows where the customer_id is < 5 and the vendor_id is 8 or similar.
+
+Other options for filtering include BETWEEN:
+
+```{sql connection=con}
+SELECT * 
+FROM farmers_market.vendor_booth_assignments 
+WHERE vendor_id = 7 AND market_date BETWEEN '2019-04-03' AND '2019-04-16'
+ORDER BY market_date
+```
+
+IN:
+
+```{sql connection=con}
+SELECT customer_id, customer_first_name, customer_last_name
+FROM farmers_market.customer 
+WHERE customer_last_name IN ('Diaz', 'Edwards', 'Wilson')
+ORDER BY customer_last_name, customer_first_name
+```
+
+LIKE:
+
+```{sql connection=con}
+SELECT customer_id, customer_first_name, customer_last_name
+FROM farmers_market.customer 
+WHERE customer_first_name LIKE 'Jer%'
+```
+
+Here the % sign acts as a wildcard so that all first names that start with "Jer" and have any number (or zero) additional characters will be included.
+
+IS NULL / IS NOT NULL - this one is pretty straightforward but note that NULL entries and blank entries are not the same:
+
+```{sql connection=con}
+SELECT * 
+FROM farmers_market.product 
+WHERE product_size IS NULL
+      OR TRIM(product_size) = ''
+```
+
+The TRIM function used above removes spaces from the beginning and end of a string, and so can be used to find rows with entries that are blank, or just a space, or any number of spaces. Each of these are different from a NULL entry.
+
+The chapter ends with a section on subqueries - queries within queries. In the IN example above, we used a hardcoded list of names, but we could also feed the results of one query into the WHERE criteria of another query:
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, quantity * cost_to_customer_per_qty price
+FROM farmers_market.customer_purchases 
+WHERE market_date IN (
+                  SELECT market_date 
+                  FROM farmers_market.market_date_info 
+                  WHERE market_rain_flag = 1 
+                  )
+LIMIT 5
+```
+
+In the query above we use a query on the market_date_info table to return all the dates when it rained, and then query the customer_purchases table to return purchases on those days.
+
+## Exercises
+
+### Ex. 1 {-}
+
+#### Question {-}
+
+> Refer to the data in Table 3.1. Write a query that returns all customer purchases of product IDs 4 and 9.
+
+#### Answer {-}
+
+Here's Table 3.1:
+
+![](images\\Ch03Img01.png)
+
+```{sql connection=con, eval = FALSE}
+SELECt *
+FROM table3.1
+WHERE PRODUCT_ID = 4 OR PRODUCT_ID = 9
+```
+
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> Refer to the data in Table 3.1. Write two queries, one using two conditions with an AND operator, and one using the BETWEEN operator, that will return all customer purchases made from vendors with vendor IDs between 8 and 10 (inclusive).
+
+#### Answer {-}
+
+```{sql connection=con, eval = FALSE}
+SELECt *
+FROM table3.1
+WHERE VENDOR_ID >= 8 AND VENDOR_ID <= 10
+```
+
+
+```{sql connection=con, eval = FALSE}
+SELECt *
+FROM table3.1
+WHERE VENDOR_ID BETWEEN 8 AND 10
+```
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> Can you think of two different ways to change the final query in the chapter so it would return purchases from days when it wasn't raining?
+
+#### Answer {-}
+
+We could change the criterion on market_rain_flag to 0:
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, quantity * cost_to_customer_per_qty price
+FROM farmers_market.customer_purchases 
+WHERE market_date IN (
+                  SELECT market_date 
+                  FROM farmers_market.market_date_info 
+                  WHERE market_rain_flag = 0 
+                  )
+LIMIT 5
+```
+
+Or we could use NOT IN instead of IN:
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, quantity * cost_to_customer_per_qty price
+FROM farmers_market.customer_purchases 
+WHERE market_date NOT IN (
+                  SELECT market_date 
+                  FROM farmers_market.market_date_info 
+                  WHERE market_rain_flag = 1 
+                  )
+LIMIT 5
+```
+
+
+
+
+```{r echo = FALSE}
+# Disconnecting the database
+dbDisconnect(con)
+```

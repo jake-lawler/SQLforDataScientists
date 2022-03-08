@@ -1,0 +1,152 @@
+# The SELECT Statement {#select}
+
+```{r echo = FALSE}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+## Chapter Notes
+
+The next few chapters introduce basic SQL syntax.
+
+Here's a very simple example:
+
+```{sql connection=con, max.print = 5}
+SELECT * FROM farmers_market.product
+```
+
+We've selected all columns from the table named "product", and I've used R Markdown's knit options to limit the results displayed to the first five rows. We can use SQL's LIMIT clause for the same effect:
+
+```{sql connection=con}
+SELECT * 
+FROM farmers_market.product
+LIMIT 5
+```
+
+Line breaks, tabs and spaces are treated the same by SQL. Usually adding line breaks makes for more legible code.
+
+Instead of asking for all columns, we can specify the ones we want in the SELECT clause:
+
+```{sql connection=con}
+SELECT product_id, product_name 
+FROM farmers_market.product
+LIMIT 5
+```
+
+The chapter introduces the ORDER BY clause:
+
+```{sql connection=con}
+SELECT product_id, product_name 
+FROM farmers_market.product 
+ORDER BY product_name
+LIMIT 5
+```
+
+The default ASC behaviour sorts text alphabetically and numbers from low to high, but we can also use the DESC behaviour:
+
+```{sql connection=con}
+SELECT product_id, product_name 
+FROM farmers_market.product 
+ORDER BY product_name DESC
+LIMIT 5
+```
+
+We can also sort on multiple columns. The code below sorts first on market date and then on vendor ID:
+
+```{sql connection=con}
+SELECT market_date, vendor_id, booth_number 
+FROM farmers_market.vendor_booth_assignments 
+ORDER BY market_date, vendor_id
+LIMIT 5
+```
+
+
+We can also do simple calculations on the columns from within the SELECT clause. The code below contains two calculatios like this. First, the columns quantity and cost_to_customer_per_qty are multiplied together and the AS keyword is used to give the resulting column the *alias* price. The the *function* ROUND is used to round the resulting price column to 2 digits after the decimal point. The ROUND function also accepts negative numbers to round digits to the left of the decimal point.
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, ROUND(quantity * cost_to_customer_per_qty,2) AS price
+FROM farmers_market.customer_purchases
+LIMIT 5
+```
+
+Another common function is the CONCAT function, which can be used inside the SELECT statement to e.g. combine first and last names into a single column like so: CONCAT(customer_first_name, " ", customer_last_name) AS customer_name. The UPPER function puts text values in all caps.
+
+There is then a section about using the query editor in MySQL workbench to perform some basic checks on your query. I did a little of that but obviously can't display that here. One option that R Markdown allows for though is to assign the result of your query to some R object using the output.var option. Here I've included output.var="transactions" in the SQL chunk options and when I run the query: 
+
+```{sql connection=con, output.var="transactions"}
+SELECT market_date, customer_id, vendor_id, ROUND(quantity * cost_to_customer_per_qty, 2) AS price
+FROM farmers_market.customer_purchases
+```
+
+I get a data frame with 4,221 rows, and I can then use standard R functions to check if the query is returning results as expected. E.g.
+
+```{r}
+range(transactions$market_date)
+```
+
+
+## Exercises
+
+### Ex. 1 {-}
+
+#### Question {-}
+
+> Write a query that returns everything in the customer table.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT *
+FROM farmers_market.customer
+```
+
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> Write a query that displays all of the columns and 10 rows from the customer table, sorted by customer_last_name , then customer_first_name .
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT *
+FROM farmers_market.customer
+ORDER BY customer_last_name, customer_first_name
+LIMIT 10
+```
+
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> Write a query that lists all customer IDs and first names in the customer table, sorted by first_name.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT customer_id, customer_first_name
+FROM farmers_market.customer
+ORDER BY customer_first_name
+```
+
+
+
+
+```{r echo = FALSE}
+# Disconnecting the database
+dbDisconnect(con)
+```

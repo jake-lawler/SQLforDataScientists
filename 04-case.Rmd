@@ -1,0 +1,136 @@
+# CASE Statements {#case}
+
+```{r echo = FALSE}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+## Chapter Notes
+
+CASE statements are used to create derived columns.
+
+Here's a list of vendors and the kind of items they sell:
+
+```{sql connection=con}
+SELECT vendor_id, vendor_name, vendor_type
+FROM farmers_market.vendor
+```
+
+We can use a CASE statement to add a new column that specifies whether the vendors sell fresh produce or something else:
+
+```{sql connection=con}
+SELECT vendor_id, vendor_name, vendor_type, 
+  CASE 
+    WHEN LOWER(vendor_type) LIKE '%fresh%' 
+    THEN 'Fresh Produce' 
+    ELSE 'Other' 
+  END AS vendor_type_condensed
+FROM farmers_market.vendor
+```
+
+Note the comma after vendor_type - it looks like CASE is included as part of the SELECT clause. Note also the catch-all ELSE command.
+
+CASE statements are often used to create binary flag fields:
+
+```{sql connection=con}
+SELECT market_date, 
+  CASE 
+    WHEN market_day = 'Saturday' OR market_day = 'Sunday' 
+    THEN 1 ELSE 0
+  END AS weekend_flag
+FROM farmers_market.market_date_info 
+LIMIT 5
+```
+
+or to bin continuous variables:
+
+```{sql connection=con}
+SELECT market_date, customer_id, vendor_id, ROUND(quantity * cost_to_customer_per_qty, 2) AS price, 
+  CASE 
+    WHEN quantity * cost_to_customer_per_qty < 5.00 
+    THEN 'Under $5' 
+    WHEN quantity * cost_to_customer_per_qty < 10.00 
+    THEN '$5-$9.99' 
+    WHEN quantity * cost_to_customer_per_qty < 20.00 
+    THEN '$10-$19.99' 
+    WHEN quantity * cost_to_customer_per_qty>= 20.00 
+    THEN '$20 and Up' 
+  END AS price_bin
+FROM farmers_market.customer_purchases
+LIMIT 10
+```
+
+
+
+## Exercises
+
+### Ex. 1 {-}
+
+#### Question {-}
+
+> Products can be sold by the individual unit or by bulk measures like lbs. or oz. Write a query that outputs the product_id and product_name columns from the product table, and add a column called prod_qty_type_condensed that displays the word “unit” if the product_qty_type is “unit,” and otherwise displays the word “bulk.”
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT product_id, product_name,
+  CASE 
+    WHEN LOWER(product_qty_type) LIKE '%unit%' 
+    THEN 'unit'
+    ELSE 'bulk'
+  END AS prod_qty_type_condensed
+FROM farmers_market.product
+```
+
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> We want to flag all of the different types of pepper products that are sold at the market. Add a column to the previous query called pepper_flag that outputs a 1 if the product_name contains the word “pepper” (regardless of capitalization), and otherwise outputs 0.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT product_id, product_name,
+  CASE 
+    WHEN LOWER(product_qty_type) LIKE '%unit%' 
+    THEN 'unit'
+    ELSE 'bulk'
+  END AS prod_qty_type_condensed,
+  CASE 
+    WHEN LOWER(product_name) LIKE '%pepper%' 
+    THEN 1
+    ELSE 0
+  END AS pepper_flag  
+FROM farmers_market.product
+```
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> Can you think of a situation when a pepper product might not get flagged as a pepper product using the code from the previous exercise?
+
+#### Answer {-}
+
+The product could just be called "Jalapenos - Organic" or similar, anything without the word pepper in it won't be flagged.
+
+
+
+```{r echo = FALSE}
+# Disconnecting the database
+dbDisconnect(con)
+```

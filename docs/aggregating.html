@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
+  <title>Chapter 6 Aggregating Results for Analysis | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
   <meta name="description" content="My Notes on ‘SQL for Data Scientists.’" />
   <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta property="og:title" content="Chapter 6 Aggregating Results for Analysis | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta name="twitter:title" content="Chapter 6 Aggregating Results for Analysis | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
   <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists.’" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="sql_joins.html"/>
 
-<link rel="next" href="data_sources.html"/>
 <script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -213,134 +213,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</h1>
-<p class="author"><em>Jake Lawler</em></p>
-<p class="date"><em>2022-03-08</em></p>
+<div id="aggregating" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Aggregating Results for Analysis</h1>
+<div id="chapter-notes-5" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Chapter Notes</h2>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>These are my notes on ‘SQL for Data Scientists’ by Renée M. P. Teate. I’ve only just started so there’s not much here yet.</p>
-<p>Here are the sources I referred to to get MySQL up-and-running from within R Markdown:</p>
-<ul>
-<li><p>The answer from ‘Harley’ <a href="https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r">here</a> on connecting to MySQL.</p></li>
-<li><p>The <a href="https://rmariadb.r-dbi.org/reference/index.html">reference page</a> for RMariaDB.</p></li>
-<li><p>The information on including SQL in R Markdown from Yihui Xie’s <a href="https://bookdown.org/yihui/rmarkdown/language-engines.html#sql">R Markdown book</a>.</p></li>
-</ul>
-<p>Here’s an example of the code I’m using to connect to the book’s example database, I’ll hide this in the future chapters:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up </span></span>
-<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to the book&#39;s example MySQL database</span></span>
-<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RMariaDB<span class="sc">::</span><span class="fu">MariaDB</span>(), </span>
-<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">dbname =</span> <span class="st">&quot;farmers_market&quot;</span>, </span>
-<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">host =</span> <span class="st">&quot;localhost&quot;</span>, </span>
-<span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">port =</span> <span class="dv">3306</span>,</span>
-<span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">user =</span> <span class="st">&quot;root&quot;</span>,</span>
-<span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">password =</span> keyring<span class="sc">::</span><span class="fu">key_get</span>(<span class="st">&quot;mysql&quot;</span>, <span class="st">&quot;root&quot;</span>))</span>
-<span id="cb1-11"><a href="index.html#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="index.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># No limit on the number of records to be displayed</span></span>
-<span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(<span class="at">sql.max.print =</span> <span class="cn">NA</span>)</span></code></pre></div>
-<p>You can then run queries by using R Markdown’s support for SQL code snippets:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
-<div class="knitsql-table">
-<table>
-<caption><span id="tab:unnamed-chunk-3">Table 0.1: </span>Displaying records 1 - 10</caption>
-<thead>
-<tr class="header">
-<th align="left">product_id</th>
-<th align="left">product_name</th>
-<th align="left">product_size</th>
-<th align="right">product_category_id</th>
-<th align="left">product_qty_type</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">Habanero Peppers - Organic</td>
-<td align="left">medium</td>
-<td align="right">1</td>
-<td align="left">lbs</td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="left">Jalapeno Peppers - Organic</td>
-<td align="left">small</td>
-<td align="right">1</td>
-<td align="left">lbs</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="left">Poblano Peppers - Organic</td>
-<td align="left">large</td>
-<td align="right">1</td>
-<td align="left">unit</td>
-</tr>
-<tr class="even">
-<td align="left">4</td>
-<td align="left">Banana Peppers - Jar</td>
-<td align="left">8 oz</td>
-<td align="right">3</td>
-<td align="left">unit</td>
-</tr>
-<tr class="odd">
-<td align="left">5</td>
-<td align="left">Whole Wheat Bread</td>
-<td align="left">1.5 lbs</td>
-<td align="right">3</td>
-<td align="left">unit</td>
-</tr>
-<tr class="even">
-<td align="left">6</td>
-<td align="left">Cut Zinnias Bouquet</td>
-<td align="left">medium</td>
-<td align="right">5</td>
-<td align="left">unit</td>
-</tr>
-<tr class="odd">
-<td align="left">7</td>
-<td align="left">Apple Pie</td>
-<td align="left">10”</td>
-<td align="right">3</td>
-<td align="left">unit</td>
-</tr>
-<tr class="even">
-<td align="left">8</td>
-<td align="left">Cherry Pie</td>
-<td align="left">10”</td>
-<td align="right">3</td>
-<td align="left">unit</td>
-</tr>
-<tr class="odd">
-<td align="left">9</td>
-<td align="left">Sweet Potatoes</td>
-<td align="left">medium</td>
-<td align="right">1</td>
-<td align="left">lbs</td>
-</tr>
-<tr class="even">
-<td align="left">10</td>
-<td align="left">Eggs</td>
-<td align="left">1 dozen</td>
-<td align="right">6</td>
-<td align="left">unit</td>
-</tr>
-</tbody>
-</table>
+<div id="exercises-5" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Exercises</h2>
+<div id="ex.-1-5" class="section level3 unnumbered">
+<h3>Ex. 1</h3>
+<div id="question-14" class="section level4 unnumbered">
+<h4>Question</h4>
 </div>
-<p>Then disconnecting the database at the end of each chapter:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnecting the database</span></span>
-<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<div id="answer-14" class="section level4 unnumbered">
+<h4>Answer</h4>
+</div>
+</div>
+</div>
+<div id="further-reading" class="section level2 unnumbered">
+<h2>Further Reading</h2>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="sql_joins.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="data_sources.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -371,7 +272,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-aggregating.Rmd",
 "text": "Edit"
 },
 "history": {
