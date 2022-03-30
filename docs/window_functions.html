@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Window Functions and Subqueries | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
+  <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Window Functions and Subqueries | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Window Functions and Subqueries | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  
+  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
+  
+
+<meta name="author" content="Jake Lawler" />
+
+
+<meta name="date" content="2022-03-30" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="aggregating.html"/>
+<link rel="next" href="date_time.html"/>
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="data_sources.html"><a href="data_sources.html"><i class="fa fa-check"></i><b>1</b> Data Sources</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="data_sources.html"><a href="data_sources.html#chapter-notes"><i class="fa fa-check"></i><b>1.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="1.2" data-path="data_sources.html"><a href="data_sources.html#exercises"><i class="fa fa-check"></i><b>1.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="data_sources.html"><a href="data_sources.html#ex.-1"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="data_sources.html"><a href="data_sources.html#ex.-2"><i class="fa fa-check"></i>Ex. 2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="select.html"><a href="select.html"><i class="fa fa-check"></i><b>2</b> The SELECT Statement</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="select.html"><a href="select.html#chapter-notes-1"><i class="fa fa-check"></i><b>2.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="2.2" data-path="select.html"><a href="select.html#exercises-1"><i class="fa fa-check"></i><b>2.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="select.html"><a href="select.html#ex.-1-1"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="select.html"><a href="select.html#ex.-2-1"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="select.html"><a href="select.html#ex.-3"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="where.html"><a href="where.html"><i class="fa fa-check"></i><b>3</b> The WHERE Clause</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="where.html"><a href="where.html#chapter-notes-2"><i class="fa fa-check"></i><b>3.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="3.2" data-path="where.html"><a href="where.html#exercises-2"><i class="fa fa-check"></i><b>3.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="where.html"><a href="where.html#ex.-1-2"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="where.html"><a href="where.html#ex.-2-2"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="where.html"><a href="where.html#ex.-3-1"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="case.html"><a href="case.html"><i class="fa fa-check"></i><b>4</b> CASE Statements</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="case.html"><a href="case.html#chapter-notes-3"><i class="fa fa-check"></i><b>4.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="4.2" data-path="case.html"><a href="case.html#exercises-3"><i class="fa fa-check"></i><b>4.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="case.html"><a href="case.html#ex.-1-3"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="case.html"><a href="case.html#ex.-2-3"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="case.html"><a href="case.html#ex.-3-2"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="sql_joins.html"><a href="sql_joins.html"><i class="fa fa-check"></i><b>5</b> SQL JOINs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="sql_joins.html"><a href="sql_joins.html#chapter-notes-4"><i class="fa fa-check"></i><b>5.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="5.2" data-path="sql_joins.html"><a href="sql_joins.html#exercises-4"><i class="fa fa-check"></i><b>5.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="sql_joins.html"><a href="sql_joins.html#ex.-1-4"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="sql_joins.html"><a href="sql_joins.html#ex.-2-4"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="sql_joins.html"><a href="sql_joins.html#ex.-3-3"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="aggregating.html"><a href="aggregating.html"><i class="fa fa-check"></i><b>6</b> Aggregating Results for Analysis</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="aggregating.html"><a href="aggregating.html#chapter-notes-5"><i class="fa fa-check"></i><b>6.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-1-5"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-2-5"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-3-4"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-1-6"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-2-6"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-3-5"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#ex.-1-7"><i class="fa fa-check"></i>Ex. 1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="window_functions" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Window Functions and Subqueries</h1>
+<div id="chapter-notes-6" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Chapter Notes</h2>
+<p>Like aggregates, windows functions can operate across multiple rows. However the records don’t have to be grouped in the output. They can return group-level information alongside each row.</p>
+<p>As an example, here’s the aggregation we’ve seen before:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb61-1"><a href="window_functions.html#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, <span class="fu">MAX</span>(original_price) <span class="kw">AS</span> highest_price</span>
+<span id="cb61-2"><a href="window_functions.html#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory </span>
+<span id="cb61-3"><a href="window_functions.html#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> vendor_id</span>
+<span id="cb61-4"><a href="window_functions.html#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> vendor_id</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 2.1: </span>3 records</caption>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="right">highest_price</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">6.99</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">18.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>By contrast, using window functions we can see the price of each product and compare it against the highest price directly.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb62-1"><a href="window_functions.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> vendor_id, product_id, original_price,</span>
+<span id="cb62-2"><a href="window_functions.html#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">MAX</span>(original_price) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> vendor_id) <span class="kw">AS</span> highest_price</span>
+<span id="cb62-3"><a href="window_functions.html#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory </span>
+<span id="cb62-4"><a href="window_functions.html#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> vendor_id, product_id</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-3">Table 2.2: </span>8 records</caption>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="right">product_id</th>
+<th align="right">original_price</th>
+<th align="right">highest_price</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">16</td>
+<td align="right">0.50</td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">6.99</td>
+<td align="right">6.99</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">2</td>
+<td align="right">3.49</td>
+<td align="right">6.99</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">3</td>
+<td align="right">0.50</td>
+<td align="right">6.99</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">4</td>
+<td align="right">4.00</td>
+<td align="right">6.99</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">5</td>
+<td align="right">6.50</td>
+<td align="right">18.00</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">18.00</td>
+<td align="right">18.00</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="right">18.00</td>
+<td align="right">18.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The first window functions introduced are ranking functions. The following code ranks each vendor’s products by price from high to low. Each vendor’s highest price product is given a 1, their second highest price gets a 2, and so on.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb63-1"><a href="window_functions.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, market_date, product_id, original_price, </span>
+<span id="cb63-2"><a href="window_functions.html#cb63-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> vendor_id <span class="kw">ORDER</span> <span class="kw">BY</span> original_price <span class="kw">DESC</span>) <span class="kw">AS</span> price_rank</span>
+<span id="cb63-3"><a href="window_functions.html#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory</span>
+<span id="cb63-4"><a href="window_functions.html#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> price_rank, vendor_id </span>
+<span id="cb63-5"><a href="window_functions.html#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 2.3: </span>10 records</caption>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="left">market_date</th>
+<th align="right">product_id</th>
+<th align="right">original_price</th>
+<th align="right">price_rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">2019-06-01</td>
+<td align="right">16</td>
+<td align="right">0.50</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="left">2019-07-03</td>
+<td align="right">1</td>
+<td align="right">6.99</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">18.00</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">2019-06-05</td>
+<td align="right">16</td>
+<td align="right">0.50</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">2019-07-06</td>
+<td align="right">1</td>
+<td align="right">6.99</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-06</td>
+<td align="right">7</td>
+<td align="right">18.00</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">2019-06-08</td>
+<td align="right">16</td>
+<td align="right">0.50</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="left">2019-07-10</td>
+<td align="right">1</td>
+<td align="right">6.99</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-10</td>
+<td align="right">7</td>
+<td align="right">18.00</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">2019-06-12</td>
+<td align="right">16</td>
+<td align="right">0.50</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>ROW_NUMBER increments up the count even if two rows have the same value. I.e. you can see in the above table that vendor_id 4 has multiple products priced at $0.50, but one gets rank 1 and the others get rank 2,3 and so on.</p>
+<p>The chapter introduces subqueries. We can use them to find the most expensive product from each vendor. This is a subquery, it treats the results of the inner query as a table, and then queries that table.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb64-1"><a href="window_functions.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span>(</span>
+<span id="cb64-2"><a href="window_functions.html#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> vendor_id, market_date, product_id, original_price, </span>
+<span id="cb64-3"><a href="window_functions.html#cb64-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> vendor_id <span class="kw">ORDER</span> <span class="kw">BY</span> original_price <span class="kw">DESC</span>) <span class="kw">AS</span> price_rank</span>
+<span id="cb64-4"><a href="window_functions.html#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> vendor_inventory</span>
+<span id="cb64-5"><a href="window_functions.html#cb64-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ORDER</span> <span class="kw">BY</span> vendor_id</span>
+<span id="cb64-6"><a href="window_functions.html#cb64-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="kw">AS</span> x</span>
+<span id="cb64-7"><a href="window_functions.html#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> x.price_rank <span class="op">=</span> <span class="dv">1</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>3 records</caption>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="left">market_date</th>
+<th align="right">product_id</th>
+<th align="right">original_price</th>
+<th align="right">price_rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">2019-06-01</td>
+<td align="right">16</td>
+<td align="right">0.50</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="left">2019-07-03</td>
+<td align="right">1</td>
+<td align="right">6.99</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">18.00</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The chapter explains why we can’t just use the WHERE clause:</p>
+<blockquote>
+<p>The reason we have to structure this as a subquery is that the entire dataset has to be processed in order for the window function to find the highest price per vendor. So we can’t filter the results using a WHERE clause (which you’ll remember evaluates the conditional statements row by row) because when that filtering is applied, the
+ROW_NUMBER has not yet been calculated for every row.</p>
+</blockquote>
+<p>The window functions RANK and DENSE RANK have the same syntax as ROW_NUMBER, but do different things. RANK works like ROW_NUMBER, but gives rows with the same value the same ranking. If there is a tie for second among two rows, for example, both rows would get the value 2, and there would be no row assigned value 3. The next value assigned would be 4. DENSE RANK does the same but doesn’t skip over rankings after a tie. I.e. a value may be assigned a 3 even if there are more than 2 rows ahead of it.</p>
+<p>The function NTILE assigns quantiles. The following code breaks items into ten groups based on original_price, assigning a 1 to the highest priced tenth.</p>
+<p>We can use subqueries to filter on the price_ntile row, in this case returning the top tenth only.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb65-1"><a href="window_functions.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span>(</span>
+<span id="cb65-2"><a href="window_functions.html#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> vendor_id, market_date, product_id, original_price, </span>
+<span id="cb65-3"><a href="window_functions.html#cb65-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">NTILE</span>(<span class="dv">10</span>) <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> original_price <span class="kw">DESC</span>) <span class="kw">AS</span> price_ntile </span>
+<span id="cb65-4"><a href="window_functions.html#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> vendor_inventory</span>
+<span id="cb65-5"><a href="window_functions.html#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ORDER</span> <span class="kw">BY</span> original_price <span class="kw">DESC</span></span>
+<span id="cb65-6"><a href="window_functions.html#cb65-6" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> x</span>
+<span id="cb65-7"><a href="window_functions.html#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> x.price_ntile <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb65-8"><a href="window_functions.html#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 2.4: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="left">market_date</th>
+<th align="right">product_id</th>
+<th align="right">original_price</th>
+<th align="right">price_ntile</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">18</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-06</td>
+<td align="right">7</td>
+<td align="right">18</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-10</td>
+<td align="right">7</td>
+<td align="right">18</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-13</td>
+<td align="right">7</td>
+<td align="right">18</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-17</td>
+<td align="right">7</td>
+<td align="right">18</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>NTILE works on row counts, not on values specified in the ORDER BY clause, so two rows with the same original_price could end up in different buckets.</p>
+<p>We can also use the aggregate functions we’ve already seen as window functions. E.g. if we want to compare each row’s value to the average value of that group.</p>
+<p>Here we calculate the average price of products on each date:</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb66-1"><a href="window_functions.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, market_date, product_id, original_price, </span>
+<span id="cb66-2"><a href="window_functions.html#cb66-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">AVG</span>(original_price) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> market_date) <span class="kw">AS</span> average_cost_product_by_market_date</span>
+<span id="cb66-3"><a href="window_functions.html#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory</span>
+<span id="cb66-4"><a href="window_functions.html#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 2.5: </span>5 records</caption>
+<colgroup>
+<col width="11%" />
+<col width="14%" />
+<col width="13%" />
+<col width="17%" />
+<col width="42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="left">market_date</th>
+<th align="right">product_id</th>
+<th align="right">original_price</th>
+<th align="right">average_cost_product_by_market_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">2019-04-03</td>
+<td align="right">4</td>
+<td align="right">4.0</td>
+<td align="right">11.625</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">11.625</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">18.0</td>
+<td align="right">11.625</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">18.0</td>
+<td align="right">11.625</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">2019-04-06</td>
+<td align="right">4</td>
+<td align="right">4.0</td>
+<td align="right">11.625</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can use a simiar query to quickly see how many products each vendor brought on each date, without aggregating:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb67-1"><a href="window_functions.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, market_date, product_id, original_price, </span>
+<span id="cb67-2"><a href="window_functions.html#cb67-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">COUNT</span>(product_id) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> vendor_id, market_date) <span class="kw">AS</span> vendor_products_per_date</span>
+<span id="cb67-3"><a href="window_functions.html#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory</span>
+<span id="cb67-4"><a href="window_functions.html#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> vendor_id <span class="kw">DESC</span>, market_date</span>
+<span id="cb67-5"><a href="window_functions.html#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-8">Table 2.6: </span>10 records</caption>
+<colgroup>
+<col width="13%" />
+<col width="16%" />
+<col width="15%" />
+<col width="20%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="left">market_date</th>
+<th align="right">product_id</th>
+<th align="right">original_price</th>
+<th align="right">vendor_products_per_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">18.0</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">18.0</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-06</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-06</td>
+<td align="right">7</td>
+<td align="right">18.0</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-06</td>
+<td align="right">8</td>
+<td align="right">18.0</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-10</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-10</td>
+<td align="right">7</td>
+<td align="right">18.0</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="left">2019-04-10</td>
+<td align="right">8</td>
+<td align="right">18.0</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">2019-04-13</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Another use for window functions is to calculate running totals. In the code below we don’t partition by anything, but do use the ORDER BY clause inside the window query.</p>
+<p>However we could use a partition to get individual running totals for each customer, for example.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb68-1"><a href="window_functions.html#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, market_date, vendor_id, product_id, quantity <span class="op">*</span> cost_to_customer_per_qty <span class="kw">AS</span> price, </span>
+<span id="cb68-2"><a href="window_functions.html#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty) <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> market_date, transaction_time, customer_id, product_id)</span>
+<span id="cb68-3"><a href="window_functions.html#cb68-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">AS</span> running_total_purchases</span>
+<span id="cb68-4"><a href="window_functions.html#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span>
+<span id="cb68-5"><a href="window_functions.html#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 3.1: </span>10 records</caption>
+<colgroup>
+<col width="16%" />
+<col width="16%" />
+<col width="13%" />
+<col width="14%" />
+<col width="8%" />
+<col width="32%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">customer_id</th>
+<th align="left">market_date</th>
+<th align="right">vendor_id</th>
+<th align="right">product_id</th>
+<th align="right">price</th>
+<th align="right">running_total_purchases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="right">36.0</td>
+<td align="right">36.0</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">18.0</td>
+<td align="right">54.0</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">60.5</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">36.0</td>
+<td align="right">96.5</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">103.0</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">5</td>
+<td align="right">6.5</td>
+<td align="right">109.5</td>
+</tr>
+<tr class="odd">
+<td align="right">23</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">18.0</td>
+<td align="right">127.5</td>
+</tr>
+<tr class="even">
+<td align="right">23</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">36.0</td>
+<td align="right">163.5</td>
+</tr>
+<tr class="odd">
+<td align="right">23</td>
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="right">54.0</td>
+<td align="right">217.5</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">4</td>
+<td align="right">20.0</td>
+<td align="right">237.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The functions LAG and LEAD allow you to use values a specified number of steps before or after the current row. The code below returns the booth number most recently used by each vendor.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb69-1"><a href="window_functions.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, vendor_id, booth_number, </span>
+<span id="cb69-2"><a href="window_functions.html#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">LAG</span>(booth_number,<span class="dv">1</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> vendor_id <span class="kw">ORDER</span> <span class="kw">BY</span> market_date,vendor_id) <span class="kw">AS</span> previous_booth_number </span>
+<span id="cb69-3"><a href="window_functions.html#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor_booth_assignments</span>
+<span id="cb69-4"><a href="window_functions.html#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date, vendor_id, booth_number</span>
+<span id="cb69-5"><a href="window_functions.html#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-10">Table 3.2: </span>10 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">vendor_id</th>
+<th align="right">booth_number</th>
+<th align="right">previous_booth_number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">4</td>
+<td align="right">7</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">11</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">8</td>
+<td align="right">6</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">9</td>
+<td align="right">8</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-06</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-06</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-06</td>
+<td align="right">4</td>
+<td align="right">7</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-06</td>
+<td align="right">7</td>
+<td align="right">11</td>
+<td align="right">11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can check when vendors change booths by wrapping the above query in another query:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb70-1"><a href="window_functions.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span>(</span>
+<span id="cb70-2"><a href="window_functions.html#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> market_date, vendor_id, booth_number, </span>
+<span id="cb70-3"><a href="window_functions.html#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">LAG</span>(booth_number,<span class="dv">1</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> vendor_id <span class="kw">ORDER</span> <span class="kw">BY</span> market_date,vendor_id) <span class="kw">AS</span> previous_booth_number </span>
+<span id="cb70-4"><a href="window_functions.html#cb70-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> farmers_market.vendor_booth_assignments</span>
+<span id="cb70-5"><a href="window_functions.html#cb70-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ORDER</span> <span class="kw">BY</span> market_date, vendor_id, booth_number</span>
+<span id="cb70-6"><a href="window_functions.html#cb70-6" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> x</span>
+<span id="cb70-7"><a href="window_functions.html#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> x.booth_number <span class="op">!=</span> x.previous_booth_number</span>
+<span id="cb70-8"><a href="window_functions.html#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-11">Table 2.7: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">vendor_id</th>
+<th align="right">booth_number</th>
+<th align="right">previous_booth_number</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-10</td>
+<td align="right">1</td>
+<td align="right">7</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-10</td>
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-13</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-13</td>
+<td align="right">4</td>
+<td align="right">7</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-06-01</td>
+<td align="right">4</td>
+<td align="right">11</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The next query combines aggregation and LAG, first calculating total sales on each date, and creating a column with the previous date’s total sales.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb71-1"><a href="window_functions.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, </span>
+<span id="cb71-2"><a href="window_functions.html#cb71-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> market_date_total_sales, </span>
+<span id="cb71-3"><a href="window_functions.html#cb71-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">LAG</span>(<span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty), <span class="dv">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> market_date) <span class="kw">AS</span></span>
+<span id="cb71-4"><a href="window_functions.html#cb71-4" aria-hidden="true" tabindex="-1"></a>            previous_market_date_total_sales </span>
+<span id="cb71-5"><a href="window_functions.html#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases </span>
+<span id="cb71-6"><a href="window_functions.html#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date</span>
+<span id="cb71-7"><a href="window_functions.html#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date</span>
+<span id="cb71-8"><a href="window_functions.html#cb71-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-12">Table 2.8: </span>10 records</caption>
+<colgroup>
+<col width="17%" />
+<col width="34%" />
+<col width="47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">market_date_total_sales</th>
+<th align="right">previous_market_date_total_sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">475.0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-06</td>
+<td align="right">549.5</td>
+<td align="right">475.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-10</td>
+<td align="right">505.0</td>
+<td align="right">549.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-13</td>
+<td align="right">377.0</td>
+<td align="right">505.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-17</td>
+<td align="right">493.5</td>
+<td align="right">377.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-20</td>
+<td align="right">455.5</td>
+<td align="right">493.5</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-24</td>
+<td align="right">366.0</td>
+<td align="right">455.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-27</td>
+<td align="right">444.5</td>
+<td align="right">366.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-01</td>
+<td align="right">523.0</td>
+<td align="right">444.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-04</td>
+<td align="right">497.0</td>
+<td align="right">523.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>LEAD works similarly, but fetches values from rows ahead.</p>
+</div>
+<div id="exercises-6" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Exercises</h2>
+<div id="ex.-1-6" class="section level3 unnumbered">
+<h3>Ex. 1</h3>
+<div id="question-17" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>Do the following two steps:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write a query that selects from the customer_purchases table and numbers each customer’s visits to the farmer’s market (labeling each market date with a different number). Each customer’s first visit is labeled 1, second visit is labeled 2, etc. (We are of course not counting visits where no purchases are made, because we have no record of those.) You can either display all rows in the customer_purchases table, with the counter changing on each new market date for each customer, or select only the unique market dates per customer (without purchase details) and number those visits. HINT: One of these approaches uses ROW_NUMBER() and one uses DENSE_RANK() .</p></li>
+<li><p>Reverse the numbering of the query from a part so each customer’s most recent visit is labeled 1, then write another query that uses this one as a subquery and filters the results to only the customer’s most recent visit.</p></li>
+</ol>
+</blockquote>
+</div>
+<div id="answer-17" class="section level4 unnumbered">
+<h4>Answer</h4>
+<p>Some customers make more than one purchase on a certain date, and so using ROW_NUMBER will increment up multiple times in one day. We can use DENSE_RANK() and DISTINCT if we only want to increment up on distinct days.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb72-1"><a href="window_functions.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> market_date, customer_id,</span>
+<span id="cb72-2"><a href="window_functions.html#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> customer_id <span class="kw">ORDER</span> <span class="kw">BY</span> market_date) <span class="kw">AS</span> customer_visit_num</span>
+<span id="cb72-3"><a href="window_functions.html#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span>
+<span id="cb72-4"><a href="window_functions.html#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_id, market_date</span>
+<span id="cb72-5"><a href="window_functions.html#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-13">Table 2.9: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+<th align="right">customer_visit_num</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-06</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-13</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-17</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-20</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-24</td>
+<td align="right">1</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Part b:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb73-1"><a href="window_functions.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, market_date <span class="kw">AS</span> most_recent_visit <span class="kw">FROM</span> (</span>
+<span id="cb73-2"><a href="window_functions.html#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> market_date, customer_id,</span>
+<span id="cb73-3"><a href="window_functions.html#cb73-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> customer_id <span class="kw">ORDER</span> <span class="kw">BY</span> market_date <span class="kw">DESC</span>) <span class="kw">AS</span> customer_visit_num</span>
+<span id="cb73-4"><a href="window_functions.html#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> customer_purchases</span>
+<span id="cb73-5"><a href="window_functions.html#cb73-5" aria-hidden="true" tabindex="-1"></a>) <span class="kw">AS</span> x</span>
+<span id="cb73-6"><a href="window_functions.html#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> x.customer_visit_num <span class="op">=</span><span class="dv">1</span></span>
+<span id="cb73-7"><a href="window_functions.html#cb73-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-14">Table 3.3: </span>10 records</caption>
+<thead>
+<tr class="header">
+<th align="left">customer_id</th>
+<th align="left">most_recent_visit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">2020-10-07</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">2020-10-03</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="left">2020-10-10</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="left">2020-10-10</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="ex.-2-6" class="section level3 unnumbered">
+<h3>Ex. 2</h3>
+<div id="question-18" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>Using a COUNT() window function, include a value along with each row of the customer_purchases table that indicates how many different times that customer has purchased that product_id.</p>
+</blockquote>
+</div>
+<div id="answer-18" class="section level4 unnumbered">
+<h4>Answer</h4>
+<div class="sourceCode" id="cb74"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb74-1"><a href="window_functions.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> customer_id, product_name,</span>
+<span id="cb74-2"><a href="window_functions.html#cb74-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> customer_id, cp.product_id) <span class="kw">AS</span> times_purchased</span>
+<span id="cb74-3"><a href="window_functions.html#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb74-4"><a href="window_functions.html#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product <span class="kw">AS</span> p</span>
+<span id="cb74-5"><a href="window_functions.html#cb74-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.product_id <span class="op">=</span> p.product_id</span>
+<span id="cb74-6"><a href="window_functions.html#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-15">Table 3.4: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="right">customer_id</th>
+<th align="left">product_name</th>
+<th align="right">times_purchased</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Habanero Peppers - Organic</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">Jalapeno Peppers - Organic</td>
+<td align="right">13</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Poblano Peppers - Organic</td>
+<td align="right">29</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">Banana Peppers - Jar</td>
+<td align="right">64</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Whole Wheat Bread</td>
+<td align="right">47</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="ex.-3-5" class="section level3 unnumbered">
+<h3>Ex. 3</h3>
+<div id="question-19" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>In the last query associated with Figure 7.14 from the chapter, we used LAG and sorted by market_date. Can you think of a way to use LEAD in place of LAG , but get the exact same output?</p>
+</blockquote>
+</div>
+<div id="answer-19" class="section level4 unnumbered">
+<h4>Answer</h4>
+<p>Here’s the image:</p>
+<p><img src="images/Ch07Img01.png" /></p>
+<p>I won’t be able to get the same output because the database has changed since the book was published, but here’s the query in the chapter. I’ll try to recreate these results:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb75-1"><a href="window_functions.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, </span>
+<span id="cb75-2"><a href="window_functions.html#cb75-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> market_date_total_sales, </span>
+<span id="cb75-3"><a href="window_functions.html#cb75-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">LAG</span>(<span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty), <span class="dv">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> market_date) <span class="kw">AS</span></span>
+<span id="cb75-4"><a href="window_functions.html#cb75-4" aria-hidden="true" tabindex="-1"></a>          previous_market_date_total_sales </span>
+<span id="cb75-5"><a href="window_functions.html#cb75-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases </span>
+<span id="cb75-6"><a href="window_functions.html#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date</span>
+<span id="cb75-7"><a href="window_functions.html#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date</span>
+<span id="cb75-8"><a href="window_functions.html#cb75-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-16">Table 7.1: </span>10 records</caption>
+<colgroup>
+<col width="17%" />
+<col width="34%" />
+<col width="47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">market_date_total_sales</th>
+<th align="right">previous_market_date_total_sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">475.0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-06</td>
+<td align="right">549.5</td>
+<td align="right">475.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-10</td>
+<td align="right">505.0</td>
+<td align="right">549.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-13</td>
+<td align="right">377.0</td>
+<td align="right">505.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-17</td>
+<td align="right">493.5</td>
+<td align="right">377.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-20</td>
+<td align="right">455.5</td>
+<td align="right">493.5</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-24</td>
+<td align="right">366.0</td>
+<td align="right">455.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-27</td>
+<td align="right">444.5</td>
+<td align="right">366.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-01</td>
+<td align="right">523.0</td>
+<td align="right">444.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-04</td>
+<td align="right">497.0</td>
+<td align="right">523.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here’s my attempt, I changed the sorting order inside the window query.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb76-1"><a href="window_functions.html#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, </span>
+<span id="cb76-2"><a href="window_functions.html#cb76-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> market_date_total_sales, </span>
+<span id="cb76-3"><a href="window_functions.html#cb76-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">LEAD</span>(<span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty), <span class="dv">1</span>) <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> market_date <span class="kw">DESC</span>) <span class="kw">AS</span></span>
+<span id="cb76-4"><a href="window_functions.html#cb76-4" aria-hidden="true" tabindex="-1"></a>          previous_market_date_total_sales </span>
+<span id="cb76-5"><a href="window_functions.html#cb76-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases </span>
+<span id="cb76-6"><a href="window_functions.html#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date</span>
+<span id="cb76-7"><a href="window_functions.html#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date</span>
+<span id="cb76-8"><a href="window_functions.html#cb76-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-17">Table 7.2: </span>10 records</caption>
+<colgroup>
+<col width="17%" />
+<col width="34%" />
+<col width="47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">market_date_total_sales</th>
+<th align="right">previous_market_date_total_sales</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">475.0</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-06</td>
+<td align="right">549.5</td>
+<td align="right">475.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-10</td>
+<td align="right">505.0</td>
+<td align="right">549.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-13</td>
+<td align="right">377.0</td>
+<td align="right">505.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-17</td>
+<td align="right">493.5</td>
+<td align="right">377.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-20</td>
+<td align="right">455.5</td>
+<td align="right">493.5</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-24</td>
+<td align="right">366.0</td>
+<td align="right">455.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-27</td>
+<td align="right">444.5</td>
+<td align="right">366.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-01</td>
+<td align="right">523.0</td>
+<td align="right">444.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-04</td>
+<td align="right">497.0</td>
+<td align="right">523.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="aggregating.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="date_time.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/07-window_functions.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

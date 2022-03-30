@@ -23,8 +23,7 @@ serve_book(dir = ".", output_dir = "_book", preview = TRUE, in_session = TRUE, q
 
 ```
 
-These are my notes on 'SQL for Data Scientists' by Renée M. P. Teate. I've only just started so there's not much here yet.
-
+These are my notes on 'SQL for Data Scientists' by Renée M. P. Teate.
 
 
 Here are the sources I referred to to get MySQL up-and-running from within R Markdown:
@@ -51,6 +50,18 @@ con <- dbConnect(RMariaDB::MariaDB(),
 
 # No limit on the number of records to be displayed
 knitr::opts_knit$set(sql.max.print = NA)
+```
+
+I've used the keyring package to store my database password. The password is initially set by running code like the following in the console:
+
+```{r eval = FALSE}
+keyring::key_set_with_value("mysql", username = "root", password = "password123")
+```
+
+And then running the following code will return the value "password123":
+
+```{r eval = FALSE}
+keyring::key_get("mysql", "root")
 ```
 
 

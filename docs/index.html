@@ -5,26 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
-  <meta name="description" content="My Notes on ‘SQL for Data Scientists.’" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
-  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
 
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-08" />
+<meta name="date" content="2022-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,7 @@
   
 
 <link rel="next" href="data_sources.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,8 +189,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-1-5"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-2-5"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-3-4"><i class="fa fa-check"></i>Ex. 3</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-1-6"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-2-6"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-3-5"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#ex.-1-7"><i class="fa fa-check"></i>Ex. 1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -216,11 +235,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</h1>
 <p class="author"><em>Jake Lawler</em></p>
-<p class="date"><em>2022-03-08</em></p>
+<p class="date"><em>2022-03-30</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
-<p>These are my notes on ‘SQL for Data Scientists’ by Renée M. P. Teate. I’ve only just started so there’s not much here yet.</p>
+<p>These are my notes on ‘SQL for Data Scientists’ by Renée M. P. Teate.</p>
 <p>Here are the sources I referred to to get MySQL up-and-running from within R Markdown:</p>
 <ul>
 <li><p>The answer from ‘Harley’ <a href="https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r">here</a> on connecting to MySQL.</p></li>
@@ -241,11 +260,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-11"><a href="index.html#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="index.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># No limit on the number of records to be displayed</span></span>
 <span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(<span class="at">sql.max.print =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<p>I’ve used the keyring package to store my database password. The password is initially set by running code like the following in the console:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_set_with_value</span>(<span class="st">&quot;mysql&quot;</span>, <span class="at">username =</span> <span class="st">&quot;root&quot;</span>, <span class="at">password =</span> <span class="st">&quot;password123&quot;</span>)</span></code></pre></div>
+<p>And then running the following code will return the value “password123”:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_get</span>(<span class="st">&quot;mysql&quot;</span>, <span class="st">&quot;root&quot;</span>)</span></code></pre></div>
 <p>You can then run queries by using R Markdown’s support for SQL code snippets:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 0.1: </span>Displaying records 1 - 10</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>Displaying records 1 - 10</caption>
+<colgroup>
+<col width="12%" />
+<col width="30%" />
+<col width="14%" />
+<col width="22%" />
+<col width="19%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">product_id</th>
@@ -330,8 +360,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </div>
 <p>Then disconnecting the database at the end of each chapter:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnecting the database</span></span>
-<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnecting the database</span></span>
+<span id="cb5-2"><a href="index.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
 
 </div>
             </section>

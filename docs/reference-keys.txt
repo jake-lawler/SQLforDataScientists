@@ -1,7 +1,7 @@
-tab:unnamed-chunk-3
-tab:unnamed-chunk-2
-tab:unnamed-chunk-4
 tab:unnamed-chunk-5
+tab:unnamed-chunk-2
+tab:unnamed-chunk-3
+tab:unnamed-chunk-4
 tab:unnamed-chunk-6
 tab:unnamed-chunk-7
 tab:unnamed-chunk-8
@@ -12,6 +12,8 @@ tab:unnamed-chunk-9
 tab:unnamed-chunk-10
 tab:unnamed-chunk-14
 tab:unnamed-chunk-15
+tab:unnamed-chunk-16
+tab:unnamed-chunk-17
 data_sources
 chapter-notes
 exercises
@@ -30,3 +32,9 @@ exercises-4
 aggregating
 chapter-notes-5
 exercises-5
+window_functions
+chapter-notes-6
+exercises-6
+date_time
+chapter-notes-7
+exercises-7

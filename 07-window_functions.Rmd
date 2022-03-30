@@ -1,0 +1,264 @@
+# Window Functions and Subqueries {#window_functions}
+
+```{r echo = FALSE}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+## Chapter Notes
+
+Like aggregates, windows functions can operate across multiple rows. However the records don't have to be grouped in the output. They can return group-level information alongside each row.
+
+As an example, here's the aggregation we've seen before:
+
+```{sql connection=con}
+SELECT vendor_id, MAX(original_price) AS highest_price
+FROM vendor_inventory 
+GROUP BY vendor_id
+ORDER BY vendor_id
+```
+
+By contrast, using window functions we can see the price of each product and compare it against the highest price directly.
+
+```{sql connection=con}
+SELECT DISTINCT vendor_id, product_id, original_price,
+    MAX(original_price) OVER (PARTITION BY vendor_id) AS highest_price
+FROM vendor_inventory 
+ORDER BY vendor_id, product_id
+```
+
+The first window functions introduced are ranking functions. The following code ranks each vendor's products by price from high to low. Each vendor's highest price product is given a 1, their second highest price gets a 2, and so on.
+
+```{sql connection=con}
+SELECT vendor_id, market_date, product_id, original_price, 
+      ROW_NUMBER() OVER (PARTITION BY vendor_id ORDER BY original_price DESC) AS price_rank
+FROM vendor_inventory
+ORDER BY price_rank, vendor_id 
+LIMIT 10
+```
+
+ROW_NUMBER increments up the count even if two rows have the same value. I.e. you can see in the above table that vendor_id 4 has multiple products priced at \$0.50, but one gets rank 1 and the others get rank 2,3 and so on. 
+
+The chapter introduces subqueries. We can use them to find the most expensive product from each vendor. This is a subquery, it treats the results of the inner query as a table, and then queries that table.
+
+```{sql connection=con}
+SELECT * FROM(
+  SELECT vendor_id, market_date, product_id, original_price, 
+        ROW_NUMBER() OVER (PARTITION BY vendor_id ORDER BY original_price DESC) AS price_rank
+  FROM vendor_inventory
+  ORDER BY vendor_id
+  ) AS x
+WHERE x.price_rank = 1
+
+```
+
+The chapter explains why we can't just use the WHERE clause:
+
+> The reason we have to structure this as a subquery is that the entire dataset has to be processed in order for the window function to find the highest price per vendor. So we can't filter the results using a WHERE clause (which you'll remember evaluates the conditional statements row by row) because when that filtering is applied, the
+ROW_NUMBER has not yet been calculated for every row.
+
+The window functions RANK and DENSE RANK have the same syntax as ROW_NUMBER, but do different things. RANK works like ROW_NUMBER, but gives rows with the same value the same ranking. If there is a tie for second among two rows, for example, both rows would get the value 2, and there would be no row assigned value 3. The next value assigned would be 4. DENSE RANK does the same but doesn't skip over rankings after a tie. I.e. a value may be assigned a 3 even if there are more than 2 rows ahead of it.
+
+The function NTILE assigns quantiles. The following code breaks items into ten groups based on original_price, assigning a 1 to the highest priced tenth.
+
+We can use subqueries to filter on the price_ntile row, in this case returning the top tenth only.
+
+```{sql connection=con}
+SELECT * FROM(
+  SELECT vendor_id, market_date, product_id, original_price, 
+          NTILE(10) OVER (ORDER BY original_price DESC) AS price_ntile 
+  FROM vendor_inventory
+  ORDER BY original_price DESC
+) AS x
+WHERE x.price_ntile = 1
+LIMIT 5
+```
+
+NTILE works on row counts, not on values specified in the ORDER BY clause, so two rows with the same original_price could end up in different buckets.
+
+
+We can also use the aggregate functions we've already seen as window functions. E.g. if we want to compare each row's value to the average value of that group.
+
+Here we calculate the average price of products on each date:
+
+```{sql connection=con}
+SELECT vendor_id, market_date, product_id, original_price, 
+      AVG(original_price) OVER (PARTITION BY market_date) AS average_cost_product_by_market_date
+FROM vendor_inventory
+LIMIT 5
+```
+
+
+We can use a simiar query to quickly see how many products each vendor brought on each date, without aggregating:
+
+```{sql connection=con}
+SELECT vendor_id, market_date, product_id, original_price, 
+        COUNT(product_id) OVER (PARTITION BY vendor_id, market_date) AS vendor_products_per_date
+FROM vendor_inventory
+ORDER BY vendor_id DESC, market_date
+LIMIT 10
+```
+
+
+Another use for window functions is to calculate running totals. In the code below we don't partition by anything, but do use the ORDER BY clause inside the window query.
+
+However we could use a partition to get individual running totals for each customer, for example.
+
+```{sql connection=con}
+SELECT customer_id, market_date, vendor_id, product_id, quantity * cost_to_customer_per_qty AS price, 
+    SUM(quantity * cost_to_customer_per_qty) OVER (ORDER BY market_date, transaction_time, customer_id, product_id)
+    AS running_total_purchases
+FROM customer_purchases
+LIMIT 10
+```
+
+
+The functions LAG and LEAD allow you to use values a specified number of steps before or after the current row. The code below returns the booth number most recently used by each vendor.
+
+```{sql connection=con}
+SELECT market_date, vendor_id, booth_number, 
+  LAG(booth_number,1) OVER (PARTITION BY vendor_id ORDER BY market_date,vendor_id) AS previous_booth_number 
+FROM farmers_market.vendor_booth_assignments
+ORDER BY market_date, vendor_id, booth_number
+LIMIT 10
+```
+
+We can check when vendors change booths by wrapping the above query in another query:
+
+```{sql connection=con}
+SELECT * FROM(
+  SELECT market_date, vendor_id, booth_number, 
+    LAG(booth_number,1) OVER (PARTITION BY vendor_id ORDER BY market_date,vendor_id) AS previous_booth_number 
+  FROM farmers_market.vendor_booth_assignments
+  ORDER BY market_date, vendor_id, booth_number
+) AS x
+WHERE x.booth_number != x.previous_booth_number
+LIMIT 5
+```
+
+The next query combines aggregation and LAG, first calculating total sales on each date, and creating a column with the previous date's total sales.
+
+```{sql connection=con}
+SELECT market_date, 
+        SUM(quantity * cost_to_customer_per_qty) AS market_date_total_sales, 
+        LAG(SUM(quantity * cost_to_customer_per_qty), 1) OVER (ORDER BY market_date) AS
+            previous_market_date_total_sales 
+FROM customer_purchases 
+GROUP BY market_date
+ORDER BY market_date
+LIMIT 10
+```
+
+LEAD works similarly, but fetches values from rows ahead.
+
+## Exercises
+
+### Ex. 1 {-}
+
+#### Question {-}
+
+> Do the following two steps: 
+>
+a. Write a query that selects from the customer_purchases table and numbers each customer's visits to the farmer’s market (labeling each market date with a different number). Each customer's first visit is labeled 1, second visit is labeled 2, etc. (We are of course not counting visits where no purchases are made, because we have no record of those.) You can either display all rows in the customer_purchases table, with the counter changing on each new market date for each customer, or select only the unique market dates per customer (without purchase details) and number those visits. HINT: One of these approaches uses ROW_NUMBER() and one uses DENSE_RANK() .
+>
+b. Reverse the numbering of the query from a part so each customer's most recent visit is labeled 1, then write another query that uses this one as a subquery and filters the results to only the customer's most recent visit.
+
+#### Answer {-}
+
+Some customers make more than one purchase on a certain date, and so using ROW_NUMBER will increment up multiple times in one day. We can use DENSE_RANK() and DISTINCT if we only want to increment up on distinct days.
+
+```{sql connection=con}
+SELECT DISTINCT market_date, customer_id,
+  DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY market_date) AS customer_visit_num
+FROM customer_purchases
+ORDER BY customer_id, market_date
+LIMIT 5
+```
+
+Part b:
+
+```{sql connection=con}
+SELECT customer_id, market_date AS most_recent_visit FROM (
+  SELECT DISTINCT market_date, customer_id,
+    DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY market_date DESC) AS customer_visit_num
+  FROM customer_purchases
+) AS x
+WHERE x.customer_visit_num =1
+LIMIT 10
+```
+
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> Using a COUNT() window function, include a value along with each row of the customer_purchases table that indicates how many different times that customer has purchased that product_id.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT DISTINCT customer_id, product_name,
+        COUNT(*) OVER (PARTITION BY customer_id, cp.product_id) AS times_purchased
+FROM customer_purchases AS cp
+LEFT JOIN product AS p
+  ON cp.product_id = p.product_id
+LIMIT 5
+```
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> In the last query associated with Figure 7.14 from the chapter, we used LAG and sorted by market_date. Can you think of a way to use LEAD in place of LAG , but get the exact same output?
+
+#### Answer {-}
+
+Here's the image:
+
+![](images\\Ch07Img01.png)
+
+I won't be able to get the same output because the database has changed since the book was published, but here's the query in the chapter. I'll try to recreate these results:
+
+```{sql connection=con}
+SELECT market_date, 
+        SUM(quantity * cost_to_customer_per_qty) AS market_date_total_sales, 
+        LAG(SUM(quantity * cost_to_customer_per_qty), 1) OVER (ORDER BY market_date) AS
+          previous_market_date_total_sales 
+FROM farmers_market.customer_purchases 
+GROUP BY market_date
+ORDER BY market_date
+LIMIT 10
+```
+
+Here's my attempt, I changed the sorting order inside the window query.
+
+```{sql connection=con}
+SELECT market_date, 
+        SUM(quantity * cost_to_customer_per_qty) AS market_date_total_sales, 
+        LEAD(SUM(quantity * cost_to_customer_per_qty), 1) OVER (ORDER BY market_date DESC) AS
+          previous_market_date_total_sales 
+FROM farmers_market.customer_purchases 
+GROUP BY market_date
+ORDER BY market_date
+LIMIT 10
+```
+
+
+
+
+```{r echo = FALSE}
+# Disconnecting the database
+dbDisconnect(con)
+```

@@ -19,6 +19,128 @@ knitr::opts_knit$set(sql.max.print = NA)
 
 ## Chapter Notes
 
+This chapter is all about aggregating and summarising data. It introduces the GROUP BY clause.
+
+This query returns the dates and customer IDs of all purchases:
+
+```{sql connection=con}
+SELECT market_date, customer_id
+FROM farmers_market.customer_purchases
+ORDER BY market_date, customer_id
+LIMIT 5
+```
+
+We can see two purchases by customer 5 on 2019-04-03. We can use the GROUP BY clause to gather those two rows together, by grouping on market_date and customer_id. With no further changes to the query, this would do the same thing as SELECT DISTINCT. However with a summarising function, we can display more useful information:
+
+```{sql connection=con}
+SELECT market_date, customer_id, COUNT(*) AS items_purchased
+FROM farmers_market.customer_purchases 
+GROUP BY market_date, customer_id 
+ORDER BY market_date, customer_id
+LIMIT 5
+```
+
+Here the COUNT function counts the number of rows in each market_date and customer_id grouping, as displays that in a new column. We can now see more readily that customer 5 made two purchases on March 3rd.
+
+We can use other summarising functions. For example, for each purchase the table records the quantity of items purchased. We can create a column displaying that instead of the number of distinct purchases:
+
+```{sql connection=con}
+SELECT market_date, customer_id, SUM(quantity) AS items_purchased
+FROM farmers_market.customer_purchases 
+GROUP BY market_date, customer_id 
+ORDER BY market_date, customer_id
+LIMIT 5
+```
+
+So customer made 5 2 distinct purchases but bought 4 different items over those two purchases.
+
+The chapter recommends running a query like this without the summarising function first, in order to check that it's doing what you think it is. In the query above, the quantity column for some products is recorded by weight instead of number of items, so the results may not be as expected. Similarly when aggregating on joins it's a good idea to perform the join first and check that it's working as expected before aggregating anything.
+
+We can also perform row-level calculations that are then aggregated by our summarising functions. For example, here is the query to return how much customer 3 spent at the market on each date:
+
+```{sql connection=con}
+SELECT market_date, customer_id, SUM(quantity* cost_to_customer_per_qty) AS total_spent
+FROM customer_purchases
+WHERE customer_id = 3
+GROUP BY market_date, customer_id
+ORDER BY market_date
+LIMIT 10
+```
+
+Here's an example of aggregating on a join. We combine three tables (customer purchases, customer, vendor) to get the names of customers and how much they spent in total at each vendor over the entire time period we have data for. We then sort highest to lowest.
+
+```{sql connection=con}
+SELECT cp.customer_id, c.customer_first_name, c.customer_last_name, vendor_name, 
+      SUM(quantity* cost_to_customer_per_qty) AS total_spent
+FROM customer_purchases AS cp
+LEFT JOIN customer AS c
+  ON cp.customer_id = c.customer_id
+LEFT JOIN vendor AS v
+  ON cp.vendor_id = v.vendor_id
+GROUP BY customer_id, vendor_name
+ORDER BY total_spent DESC
+LIMIT 5
+```
+
+There is more than one vendor in the results of that query, it's just that people appear to be spending a large amount of money on Annie's Pies.
+
+Other possible functions we might want to use on grouped results include:
+
+* MAX and MIN (e.g. to find the most expensive produce in each category),
+* We saw COUNT above but we can also use COUNT DISTINCT when we want to count unique rows only. The syntax works like so: COUNT(DISTINCT product_id),
+* AVG, for the average    
+
+The next section of the chapter introduces the HAVING clause, which is used for filtering after aggregation. It goes after the GROUP BY clause. 
+
+The following query returns the total amount each customer spent at each vendor, and then filters for total amount over \$1,000.
+
+```{sql connection=con}
+SELECT customer_id, vendor_name, SUM(quantity * cost_to_customer_per_qty) AS total_spent
+FROM customer_purchases AS cp
+JOIN vendor AS v
+  ON cp.vendor_id = v.vendor_id
+GROUP BY customer_id, vendor_name
+HAVING total_spent >= 1000
+ORDER BY customer_id, vendor_name
+LIMIT 10
+```
+
+Here's a tip from the chapter:
+> If you GROUP BY all of the fields that are supposed to be distinct in your resulting dataset, then add a HAVING clause that filters to aggregated rows with a COUNT(*) > 1 , any results returned indicate that there is more than one row with your “unique” combination of values, highlighting the existence of unwanted duplicates in your
+database or query results!
+
+The next section discusses CASE statements inside aggregating functions. We learned above that the quantity column in the customer_purchases table is sometimes in lbs and sometimes in units (e.g. 1 tomato). We can use CASE statements so that only products with the same units are summed together. 
+
+This query returns the total quantity of items purchased per customer per day, separated by units. I've order it by quantity in lbs from highest to lowest.
+
+```{sql connection=con}
+SELECT cp.market_date,cp.customer_id,
+        SUM(CASE WHEN product_qty_type = "unit" 
+          THEN quantity 
+          ELSE 0 
+        END) AS quantity_units, 
+        SUM(CASE WHEN product_qty_type = "lbs" 
+          THEN quantity 
+          ELSE 0 
+        END) AS quantity_lbs
+FROM farmers_market.customer_purchases AS cp 
+INNER JOIN farmers_market.product AS p
+  ON cp.product_id = p.product_id
+GROUP BY market_date, customer_id 
+ORDER BY quantity_lbs DESC
+LIMIT 5
+```
+
+So customer 15 bought almost 12 pounds of items on 2020-09-19, as well as 8 units of other products. Let's see what they were:
+
+```{sql connection=con}
+SELECT market_date, customer_id, product_name, quantity, product_qty_type 
+FROM customer_purchases AS cp
+LEFT JOIN product AS p
+  ON cp.product_id = p.product_id
+WHERE customer_id = 15 AND market_date = "2020-09-19"
+```
+Damn. A pepper fiend.
 
 
 ## Exercises
@@ -27,11 +149,90 @@ knitr::opts_knit$set(sql.max.print = NA)
 
 #### Question {-}
 
+> Write a query that determines how many times each vendor has rented a booth at the farmer’s market. In other words, count the vendor booth assignments per vendor_id .
 
 #### Answer {-}
 
 
-## Further Reading {-}
+
+```{sql connection=con}
+SELECT vendor_id, COUNT(booth_number) AS total_assignments
+FROM vendor_booth_assignments
+GROUP BY vendor_id
+ORDER BY vendor_id
+```
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> In Chapter 5, “SQL Joins,” Exercise 3, we asked “When is each type of fresh fruit or vegetable in season, locally?” Write a query that displays the product category name, product name, earliest date available, and latest date available for every product in the “Fresh Fruits & Vegetables” product category.
+
+#### Answer {-}
+
+Adapting my answer from exercise three of the last chapter:
+
+
+```{sql connection=con}
+SELECT  p.product_name,
+        pc.product_category_name,
+        MIN(vi.market_date) AS earliest_date_available,
+        MAX(vi.market_date) AS latest_date_available
+FROM product AS p
+LEFT JOIN product_category AS pc
+  ON p.product_category_id = pc.product_category_id
+LEFT JOIN vendor_inventory AS vi
+  ON p.product_id = vi.product_id
+WHERE LOWER(product_category_name) LIKE "%fruit%" AND market_date IS NOT NULL
+GROUP BY product_name
+ORDER BY product_name, market_date
+```
+I don't like that they all have the same end date, but a quick check reveals that the data does go further than that, just not for products in the Fresh Fruits category.
+
+```{sql connection=con}
+SELECT  MIN(market_date) AS start_date, MAX(market_date) AS end_date 
+FROM vendor_inventory
+```
+I also don't like how the latest_date_available is more than one year after the earliest_date_available. The question is about seasonality, and so the earliest and latest dates should be within a year of each other. To fix this, we'll need date functions, which are introduced in chapter 8.
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> The Farmer's Market Customer Appreciation Committee wants to give a bumper sticker to everyone who has ever spent more than $50 at the market. Write a query that generates a list of customers for them to give stickers to, sorted by last name, then first name.
+
+#### Answer {-}
+
+The question is slightly ambiguous. Does this mean \$50 total or \$50 in one transaction?
+
+Here's the query for total amount, it looks like every customer in the database has spent well over \$1,000:
+
+```{sql connection=con}
+SELECT c.customer_last_name, c.customer_first_name,
+      SUM(quantity* cost_to_customer_per_qty) AS total_spent
+FROM customer_purchases AS cp
+LEFT JOIN customer AS c
+  ON cp.customer_id = c.customer_id
+GROUP BY customer_last_name, customer_first_name
+HAVING total_spent > 50
+ORDER BY customer_last_name, customer_first_name
+LIMIT 5
+```
+
+Here's the query if we're looking for at least \$50 in one transaction:
+
+```{sql connection=con}
+SELECT customer_last_name, customer_first_name, MAX(quantity*cost_to_customer_per_qty) AS most_spent
+FROM customer_purchases AS cp
+JOIN customer AS c
+  ON cp.customer_id = c.customer_id
+GROUP BY customer_last_name, customer_first_name
+HAVING most_spent > 50
+ORDER BY customer_last_name, customer_first_name
+LIMIT 5
+```
+
+Concerned about the frequency of \$54 dollars but after checking it does look like the query ran successfully.
 
 
 

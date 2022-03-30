@@ -5,26 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 4 CASE Statements | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
-  <meta name="description" content="My Notes on ‘SQL for Data Scientists.’" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 4 CASE Statements | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 4 CASE Statements | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
-  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
 
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-08" />
+<meta name="date" content="2022-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,7 @@
   
 <link rel="prev" href="where.html"/>
 <link rel="next" href="sql_joins.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,8 +189,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-1-5"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-2-5"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-3-4"><i class="fa fa-check"></i>Ex. 3</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-1-6"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-2-6"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-3-5"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#ex.-1-7"><i class="fa fa-check"></i>Ex. 1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -219,11 +238,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Chapter Notes</h2>
 <p>CASE statements are used to create derived columns.</p>
 <p>Here’s a list of vendors and the kind of items they sell:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb31-1"><a href="case.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, vendor_name, vendor_type</span>
-<span id="cb31-2"><a href="case.html#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb33-1"><a href="case.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, vendor_name, vendor_type</span>
+<span id="cb33-2"><a href="case.html#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor</span></code></pre></div>
 <div class="knitsql-table">
-<table>
+<table style="width:100%;">
 <caption><span id="tab:unnamed-chunk-2">Table 2.1: </span>9 records</caption>
+<colgroup>
+<col width="13%" />
+<col width="45%" />
+<col width="41%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">vendor_id</th>
@@ -281,16 +305,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </div>
 <p>We can use a CASE statement to add a new column that specifies whether the vendors sell fresh produce or something else:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb32-1"><a href="case.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, vendor_name, vendor_type, </span>
-<span id="cb32-2"><a href="case.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
-<span id="cb32-3"><a href="case.html#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(vendor_type) <span class="kw">LIKE</span> <span class="st">&#39;%fresh%&#39;</span> </span>
-<span id="cb32-4"><a href="case.html#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;Fresh Produce&#39;</span> </span>
-<span id="cb32-5"><a href="case.html#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;Other&#39;</span> </span>
-<span id="cb32-6"><a href="case.html#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> vendor_type_condensed</span>
-<span id="cb32-7"><a href="case.html#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb34-1"><a href="case.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, vendor_name, vendor_type, </span>
+<span id="cb34-2"><a href="case.html#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
+<span id="cb34-3"><a href="case.html#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(vendor_type) <span class="kw">LIKE</span> <span class="st">&#39;%fresh%&#39;</span> </span>
+<span id="cb34-4"><a href="case.html#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;Fresh Produce&#39;</span> </span>
+<span id="cb34-5"><a href="case.html#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;Other&#39;</span> </span>
+<span id="cb34-6"><a href="case.html#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> vendor_type_condensed</span>
+<span id="cb34-7"><a href="case.html#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor</span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 0.1: </span>9 records</caption>
+<caption><span id="tab:unnamed-chunk-3">Table 2.2: </span>9 records</caption>
+<colgroup>
+<col width="10%" />
+<col width="34%" />
+<col width="31%" />
+<col width="23%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">vendor_id</th>
@@ -359,16 +389,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Note the comma after vendor_type - it looks like CASE is included as part of the SELECT clause. Note also the catch-all ELSE command.</p>
 <p>CASE statements are often used to create binary flag fields:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb33-1"><a href="case.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, </span>
-<span id="cb33-2"><a href="case.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
-<span id="cb33-3"><a href="case.html#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> market_day <span class="op">=</span> <span class="st">&#39;Saturday&#39;</span> <span class="kw">OR</span> market_day <span class="op">=</span> <span class="st">&#39;Sunday&#39;</span> </span>
-<span id="cb33-4"><a href="case.html#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">ELSE</span> <span class="dv">0</span></span>
-<span id="cb33-5"><a href="case.html#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> weekend_flag</span>
-<span id="cb33-6"><a href="case.html#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.market_date_info </span>
-<span id="cb33-7"><a href="case.html#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb35-1"><a href="case.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, </span>
+<span id="cb35-2"><a href="case.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
+<span id="cb35-3"><a href="case.html#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> market_day <span class="op">=</span> <span class="st">&#39;Saturday&#39;</span> <span class="kw">OR</span> market_day <span class="op">=</span> <span class="st">&#39;Sunday&#39;</span> </span>
+<span id="cb35-4"><a href="case.html#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="dv">1</span> <span class="cf">ELSE</span> <span class="dv">0</span></span>
+<span id="cb35-5"><a href="case.html#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> weekend_flag</span>
+<span id="cb35-6"><a href="case.html#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.market_date_info </span>
+<span id="cb35-7"><a href="case.html#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 2.2: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 2.3: </span>5 records</caption>
 <thead>
 <tr class="header">
 <th align="left">market_date</th>
@@ -400,22 +430,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </div>
 <p>or to bin continuous variables:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb34-1"><a href="case.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, vendor_id, <span class="fu">ROUND</span>(quantity <span class="op">*</span> cost_to_customer_per_qty, <span class="dv">2</span>) <span class="kw">AS</span> price, </span>
-<span id="cb34-2"><a href="case.html#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
-<span id="cb34-3"><a href="case.html#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty <span class="op">&lt;</span> <span class="fl">5.00</span> </span>
-<span id="cb34-4"><a href="case.html#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;Under $5&#39;</span> </span>
-<span id="cb34-5"><a href="case.html#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty <span class="op">&lt;</span> <span class="fl">10.00</span> </span>
-<span id="cb34-6"><a href="case.html#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;$5-$9.99&#39;</span> </span>
-<span id="cb34-7"><a href="case.html#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty <span class="op">&lt;</span> <span class="fl">20.00</span> </span>
-<span id="cb34-8"><a href="case.html#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;$10-$19.99&#39;</span> </span>
-<span id="cb34-9"><a href="case.html#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty<span class="op">&gt;=</span> <span class="fl">20.00</span> </span>
-<span id="cb34-10"><a href="case.html#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;$20 and Up&#39;</span> </span>
-<span id="cb34-11"><a href="case.html#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> price_bin</span>
-<span id="cb34-12"><a href="case.html#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span>
-<span id="cb34-13"><a href="case.html#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb36-1"><a href="case.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, vendor_id, <span class="fu">ROUND</span>(quantity <span class="op">*</span> cost_to_customer_per_qty, <span class="dv">2</span>) <span class="kw">AS</span> price, </span>
+<span id="cb36-2"><a href="case.html#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
+<span id="cb36-3"><a href="case.html#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty <span class="op">&lt;</span> <span class="fl">5.00</span> </span>
+<span id="cb36-4"><a href="case.html#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;Under $5&#39;</span> </span>
+<span id="cb36-5"><a href="case.html#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty <span class="op">&lt;</span> <span class="fl">10.00</span> </span>
+<span id="cb36-6"><a href="case.html#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;$5-$9.99&#39;</span> </span>
+<span id="cb36-7"><a href="case.html#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty <span class="op">&lt;</span> <span class="fl">20.00</span> </span>
+<span id="cb36-8"><a href="case.html#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;$10-$19.99&#39;</span> </span>
+<span id="cb36-9"><a href="case.html#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> quantity <span class="op">*</span> cost_to_customer_per_qty<span class="op">&gt;=</span> <span class="fl">20.00</span> </span>
+<span id="cb36-10"><a href="case.html#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;$20 and Up&#39;</span> </span>
+<span id="cb36-11"><a href="case.html#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> price_bin</span>
+<span id="cb36-12"><a href="case.html#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span>
+<span id="cb36-13"><a href="case.html#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 2.3: </span>10 records</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>10 records</caption>
 <thead>
 <tr class="header">
 <th align="left">market_date</th>
@@ -512,16 +542,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="answer-8" class="section level4 unnumbered">
 <h4>Answer</h4>
-<div class="sourceCode" id="cb35"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb35-1"><a href="case.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name,</span>
-<span id="cb35-2"><a href="case.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
-<span id="cb35-3"><a href="case.html#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(product_qty_type) <span class="kw">LIKE</span> <span class="st">&#39;%unit%&#39;</span> </span>
-<span id="cb35-4"><a href="case.html#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;unit&#39;</span></span>
-<span id="cb35-5"><a href="case.html#cb35-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;bulk&#39;</span></span>
-<span id="cb35-6"><a href="case.html#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> prod_qty_type_condensed</span>
-<span id="cb35-7"><a href="case.html#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb37-1"><a href="case.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name,</span>
+<span id="cb37-2"><a href="case.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
+<span id="cb37-3"><a href="case.html#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(product_qty_type) <span class="kw">LIKE</span> <span class="st">&#39;%unit%&#39;</span> </span>
+<span id="cb37-4"><a href="case.html#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;unit&#39;</span></span>
+<span id="cb37-5"><a href="case.html#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;bulk&#39;</span></span>
+<span id="cb37-6"><a href="case.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> prod_qty_type_condensed</span>
+<span id="cb37-7"><a href="case.html#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-6">Table 2.4: </span>23 records</caption>
+<colgroup>
+<col width="15%" />
+<col width="52%" />
+<col width="32%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">product_id</th>
@@ -660,21 +695,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="answer-9" class="section level4 unnumbered">
 <h4>Answer</h4>
-<div class="sourceCode" id="cb36"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb36-1"><a href="case.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name,</span>
-<span id="cb36-2"><a href="case.html#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
-<span id="cb36-3"><a href="case.html#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(product_qty_type) <span class="kw">LIKE</span> <span class="st">&#39;%unit%&#39;</span> </span>
-<span id="cb36-4"><a href="case.html#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;unit&#39;</span></span>
-<span id="cb36-5"><a href="case.html#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;bulk&#39;</span></span>
-<span id="cb36-6"><a href="case.html#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> prod_qty_type_condensed,</span>
-<span id="cb36-7"><a href="case.html#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
-<span id="cb36-8"><a href="case.html#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(product_name) <span class="kw">LIKE</span> <span class="st">&#39;%pepper%&#39;</span> </span>
-<span id="cb36-9"><a href="case.html#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="dv">1</span></span>
-<span id="cb36-10"><a href="case.html#cb36-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="dv">0</span></span>
-<span id="cb36-11"><a href="case.html#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> pepper_flag  </span>
-<span id="cb36-12"><a href="case.html#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb38-1"><a href="case.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name,</span>
+<span id="cb38-2"><a href="case.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
+<span id="cb38-3"><a href="case.html#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(product_qty_type) <span class="kw">LIKE</span> <span class="st">&#39;%unit%&#39;</span> </span>
+<span id="cb38-4"><a href="case.html#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="st">&#39;unit&#39;</span></span>
+<span id="cb38-5"><a href="case.html#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;bulk&#39;</span></span>
+<span id="cb38-6"><a href="case.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> prod_qty_type_condensed,</span>
+<span id="cb38-7"><a href="case.html#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span> </span>
+<span id="cb38-8"><a href="case.html#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">LOWER</span>(product_name) <span class="kw">LIKE</span> <span class="st">&#39;%pepper%&#39;</span> </span>
+<span id="cb38-9"><a href="case.html#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">THEN</span> <span class="dv">1</span></span>
+<span id="cb38-10"><a href="case.html#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="dv">0</span></span>
+<span id="cb38-11"><a href="case.html#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> pepper_flag  </span>
+<span id="cb38-12"><a href="case.html#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-7">Table 2.5: </span>23 records</caption>
+<colgroup>
+<col width="12%" />
+<col width="44%" />
+<col width="28%" />
+<col width="14%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">product_id</th>

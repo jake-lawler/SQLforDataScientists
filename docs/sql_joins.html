@@ -5,26 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 SQL JOINs | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
-  <meta name="description" content="My Notes on ‘SQL for Data Scientists.’" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 SQL JOINs | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 5 SQL JOINs | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
-  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
 
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-08" />
+<meta name="date" content="2022-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,7 @@
   
 <link rel="prev" href="case.html"/>
 <link rel="next" href="aggregating.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,8 +189,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-1-5"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-2-5"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-3-4"><i class="fa fa-check"></i>Ex. 3</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-1-6"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-2-6"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-3-5"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#ex.-1-7"><i class="fa fa-check"></i>Ex. 1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -220,11 +239,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>JOINs are used to pull data from across multiple related tables.</p>
 <p>Let’s say we want to list the name of each product along with it’s category. These are stored in different tables:</p>
 <p><img src="images/Ch05Img01.png" /></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb37-1"><a href="sql_joins.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
-<span id="cb37-2"><a href="sql_joins.html#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product </span>
-<span id="cb37-3"><a href="sql_joins.html#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category</span>
-<span id="cb37-4"><a href="sql_joins.html#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> product.product_category_id <span class="op">=</span> product_category.product_category_id</span>
-<span id="cb37-5"><a href="sql_joins.html#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb39-1"><a href="sql_joins.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb39-2"><a href="sql_joins.html#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product </span>
+<span id="cb39-3"><a href="sql_joins.html#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category</span>
+<span id="cb39-4"><a href="sql_joins.html#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ON</span> product.product_category_id <span class="op">=</span> product_category.product_category_id</span>
+<span id="cb39-5"><a href="sql_joins.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table style="width:100%;">
 <caption><span id="tab:unnamed-chunk-2">Table 2.1: </span>5 records</caption>
@@ -304,18 +323,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>Also, the code above is the first time I’ve seen the code not specify the database. I.e. it refers to product instead of farmers_market.product. I’m not exactly sure about when this can be left out, but it’s not specific to JOINs at all - the farmers_market part can be removed from the queries in previous chapters and the code will still run.</p>
 <p>Note that product_category_id appears in the results above twice - one from each table (although I believe R is adding “..6” to the second one, since it doesn’t like data frames with multiple columns with the same name). We could prevent this by specifying which columns to include, or by creating an alias for the column names that specifies which table each ID column came from:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb38-1"><a href="sql_joins.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product.product_id, </span>
-<span id="cb38-2"><a href="sql_joins.html#cb38-2" aria-hidden="true" tabindex="-1"></a>        product.product_name, </span>
-<span id="cb38-3"><a href="sql_joins.html#cb38-3" aria-hidden="true" tabindex="-1"></a>        product.product_category_id <span class="kw">AS</span> product_prod_cat_id, </span>
-<span id="cb38-4"><a href="sql_joins.html#cb38-4" aria-hidden="true" tabindex="-1"></a>        product_category.product_category_id <span class="kw">AS</span> category_prod_cat_id, </span>
-<span id="cb38-5"><a href="sql_joins.html#cb38-5" aria-hidden="true" tabindex="-1"></a>        product_category.product_category_name</span>
-<span id="cb38-6"><a href="sql_joins.html#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product </span>
-<span id="cb38-7"><a href="sql_joins.html#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category</span>
-<span id="cb38-8"><a href="sql_joins.html#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> product.product_category_id <span class="op">=</span> product_category.product_category_id</span>
-<span id="cb38-9"><a href="sql_joins.html#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb40-1"><a href="sql_joins.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product.product_id, </span>
+<span id="cb40-2"><a href="sql_joins.html#cb40-2" aria-hidden="true" tabindex="-1"></a>        product.product_name, </span>
+<span id="cb40-3"><a href="sql_joins.html#cb40-3" aria-hidden="true" tabindex="-1"></a>        product.product_category_id <span class="kw">AS</span> product_prod_cat_id, </span>
+<span id="cb40-4"><a href="sql_joins.html#cb40-4" aria-hidden="true" tabindex="-1"></a>        product_category.product_category_id <span class="kw">AS</span> category_prod_cat_id, </span>
+<span id="cb40-5"><a href="sql_joins.html#cb40-5" aria-hidden="true" tabindex="-1"></a>        product_category.product_category_name</span>
+<span id="cb40-6"><a href="sql_joins.html#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product </span>
+<span id="cb40-7"><a href="sql_joins.html#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category</span>
+<span id="cb40-8"><a href="sql_joins.html#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> product.product_category_id <span class="op">=</span> product_category.product_category_id</span>
+<span id="cb40-9"><a href="sql_joins.html#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 0.1: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-3">Table 2.2: </span>5 records</caption>
 <colgroup>
 <col width="10%" />
 <col width="25%" />
@@ -371,19 +390,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
-<p>The chapter also demonstrates aliasing that is used to shorten the table names in the rest of the query for convenience. It doesn’t affect results. In the code that follows the product table is aliased as “p” and the product_category table is aliased as “pc.”</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb39-1"><a href="sql_joins.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
-<span id="cb39-2"><a href="sql_joins.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  p.product_name, </span>
-<span id="cb39-3"><a href="sql_joins.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  pc.product_category_id, </span>
-<span id="cb39-4"><a href="sql_joins.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  pc.product_category_name</span>
-<span id="cb39-5"><a href="sql_joins.html#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p </span>
-<span id="cb39-6"><a href="sql_joins.html#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc </span>
-<span id="cb39-7"><a href="sql_joins.html#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
-<span id="cb39-8"><a href="sql_joins.html#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> pc.product_category_name, p.product_name</span>
-<span id="cb39-9"><a href="sql_joins.html#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<p>The chapter also demonstrates aliasing that is used to shorten the table names in the rest of the query for convenience. It doesn’t affect results. In the code that follows the product table is aliased as “p” and the product_category table is aliased as “pc”.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb41-1"><a href="sql_joins.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
+<span id="cb41-2"><a href="sql_joins.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  p.product_name, </span>
+<span id="cb41-3"><a href="sql_joins.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  pc.product_category_id, </span>
+<span id="cb41-4"><a href="sql_joins.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  pc.product_category_name</span>
+<span id="cb41-5"><a href="sql_joins.html#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p </span>
+<span id="cb41-6"><a href="sql_joins.html#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc </span>
+<span id="cb41-7"><a href="sql_joins.html#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
+<span id="cb41-8"><a href="sql_joins.html#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> pc.product_category_name, p.product_name</span>
+<span id="cb41-9"><a href="sql_joins.html#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 2.2: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 2.3: </span>5 records</caption>
+<colgroup>
+<col width="12%" />
+<col width="32%" />
+<col width="22%" />
+<col width="33%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="right">product_id</th>
@@ -429,18 +454,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>You can see the shortened table names used in the SELECT clause, and when specifying the joining columns and ordering.</p>
 <p>In general with aliasing, the AS keyword is optional. The code “product AS p” and “product p” will do the same thing.</p>
 <p>RIGHT JOINs work analogously:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb40-1"><a href="sql_joins.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
-<span id="cb40-2"><a href="sql_joins.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  p.product_name, </span>
-<span id="cb40-3"><a href="sql_joins.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  pc.product_category_id, </span>
-<span id="cb40-4"><a href="sql_joins.html#cb40-4" aria-hidden="true" tabindex="-1"></a>  pc.product_category_name</span>
-<span id="cb40-5"><a href="sql_joins.html#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p </span>
-<span id="cb40-6"><a href="sql_joins.html#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RIGHT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc </span>
-<span id="cb40-7"><a href="sql_joins.html#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
-<span id="cb40-8"><a href="sql_joins.html#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> p.product_name</span>
-<span id="cb40-9"><a href="sql_joins.html#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb42-1"><a href="sql_joins.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
+<span id="cb42-2"><a href="sql_joins.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  p.product_name, </span>
+<span id="cb42-3"><a href="sql_joins.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  pc.product_category_id, </span>
+<span id="cb42-4"><a href="sql_joins.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  pc.product_category_name</span>
+<span id="cb42-5"><a href="sql_joins.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p </span>
+<span id="cb42-6"><a href="sql_joins.html#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RIGHT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc </span>
+<span id="cb42-7"><a href="sql_joins.html#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
+<span id="cb42-8"><a href="sql_joins.html#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> p.product_name</span>
+<span id="cb42-9"><a href="sql_joins.html#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 2.3: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>5 records</caption>
+<colgroup>
+<col width="12%" />
+<col width="33%" />
+<col width="23%" />
+<col width="30%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="right">product_id</th>
@@ -490,18 +521,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p>If there could be multiple product categories for each product, then they would both appear in the left join performed above, so the results would have more than 23 rows.</p>
 <p>INNER JOINs keep only rows where the product_category_id appears in both tables:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb41-1"><a href="sql_joins.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
-<span id="cb41-2"><a href="sql_joins.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  p.product_name, </span>
-<span id="cb41-3"><a href="sql_joins.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  pc.product_category_id, </span>
-<span id="cb41-4"><a href="sql_joins.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  pc.product_category_name</span>
-<span id="cb41-5"><a href="sql_joins.html#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p </span>
-<span id="cb41-6"><a href="sql_joins.html#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc </span>
-<span id="cb41-7"><a href="sql_joins.html#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
-<span id="cb41-8"><a href="sql_joins.html#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> p.product_name</span>
-<span id="cb41-9"><a href="sql_joins.html#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb43-1"><a href="sql_joins.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id, </span>
+<span id="cb43-2"><a href="sql_joins.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  p.product_name, </span>
+<span id="cb43-3"><a href="sql_joins.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  pc.product_category_id, </span>
+<span id="cb43-4"><a href="sql_joins.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  pc.product_category_name</span>
+<span id="cb43-5"><a href="sql_joins.html#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p </span>
+<span id="cb43-6"><a href="sql_joins.html#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc </span>
+<span id="cb43-7"><a href="sql_joins.html#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
+<span id="cb43-8"><a href="sql_joins.html#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> p.product_name</span>
+<span id="cb43-9"><a href="sql_joins.html#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-6">Table 2.4: </span>5 records</caption>
+<colgroup>
+<col width="12%" />
+<col width="33%" />
+<col width="23%" />
+<col width="30%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="right">product_id</th>
@@ -559,12 +596,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="answer-11" class="section level4 unnumbered">
 <h4>Answer</h4>
-<div class="sourceCode" id="cb42"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb42-1"><a href="sql_joins.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb42-2"><a href="sql_joins.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor <span class="kw">AS</span> v</span>
-<span id="cb42-3"><a href="sql_joins.html#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> vendor_booth_assignments <span class="kw">AS</span> vba</span>
-<span id="cb42-4"><a href="sql_joins.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> v.vendor_id <span class="op">=</span> vba.vendor_id</span>
-<span id="cb42-5"><a href="sql_joins.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> vendor_name, market_date</span>
-<span id="cb42-6"><a href="sql_joins.html#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb44-1"><a href="sql_joins.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb44-2"><a href="sql_joins.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor <span class="kw">AS</span> v</span>
+<span id="cb44-3"><a href="sql_joins.html#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> vendor_booth_assignments <span class="kw">AS</span> vba</span>
+<span id="cb44-4"><a href="sql_joins.html#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> v.vendor_id <span class="op">=</span> vba.vendor_id</span>
+<span id="cb44-5"><a href="sql_joins.html#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> vendor_name, market_date</span>
+<span id="cb44-6"><a href="sql_joins.html#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table style="width:100%;">
 <caption><span id="tab:unnamed-chunk-7">Table 2.5: </span>5 records</caption>
@@ -653,11 +690,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Is it possible to write a query that produces an output identical to the output of the following query, but using a LEFT JOIN instead of a RIGHT JOIN?</p>
 </blockquote>
-<div class="sourceCode" id="cb43"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb43-1"><a href="sql_joins.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
-<span id="cb43-2"><a href="sql_joins.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer <span class="kw">AS</span> c </span>
-<span id="cb43-3"><a href="sql_joins.html#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RIGHT</span> <span class="kw">JOIN</span> customer_purchases <span class="kw">AS</span> cp</span>
-<span id="cb43-4"><a href="sql_joins.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> c.customer_id <span class="op">=</span> cp.customer_id</span>
-<span id="cb43-5"><a href="sql_joins.html#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb45-1"><a href="sql_joins.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb45-2"><a href="sql_joins.html#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer <span class="kw">AS</span> c </span>
+<span id="cb45-3"><a href="sql_joins.html#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RIGHT</span> <span class="kw">JOIN</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb45-4"><a href="sql_joins.html#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> c.customer_id <span class="op">=</span> cp.customer_id</span>
+<span id="cb45-5"><a href="sql_joins.html#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-8">Table 2.6: </span>10 records</caption>
@@ -827,21 +864,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="answer-12" class="section level4 unnumbered">
 <h4>Answer</h4>
 <p>Probably there’s a less clumsy way of getting the columns in the right order, but this works:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb44-1"><a href="sql_joins.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id,</span>
-<span id="cb44-2"><a href="sql_joins.html#cb44-2" aria-hidden="true" tabindex="-1"></a>        c.customer_first_name,</span>
-<span id="cb44-3"><a href="sql_joins.html#cb44-3" aria-hidden="true" tabindex="-1"></a>        c.customer_last_name,</span>
-<span id="cb44-4"><a href="sql_joins.html#cb44-4" aria-hidden="true" tabindex="-1"></a>        c.customer_zip,</span>
-<span id="cb44-5"><a href="sql_joins.html#cb44-5" aria-hidden="true" tabindex="-1"></a>        cp.product_id,</span>
-<span id="cb44-6"><a href="sql_joins.html#cb44-6" aria-hidden="true" tabindex="-1"></a>        cp.vendor_id,</span>
-<span id="cb44-7"><a href="sql_joins.html#cb44-7" aria-hidden="true" tabindex="-1"></a>        cp.market_date, </span>
-<span id="cb44-8"><a href="sql_joins.html#cb44-8" aria-hidden="true" tabindex="-1"></a>        cp.customer_id,</span>
-<span id="cb44-9"><a href="sql_joins.html#cb44-9" aria-hidden="true" tabindex="-1"></a>        cp.quantity,</span>
-<span id="cb44-10"><a href="sql_joins.html#cb44-10" aria-hidden="true" tabindex="-1"></a>        cp.cost_to_customer_per_qty,</span>
-<span id="cb44-11"><a href="sql_joins.html#cb44-11" aria-hidden="true" tabindex="-1"></a>        cp.transaction_time </span>
-<span id="cb44-12"><a href="sql_joins.html#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp </span>
-<span id="cb44-13"><a href="sql_joins.html#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> customer <span class="kw">AS</span> c</span>
-<span id="cb44-14"><a href="sql_joins.html#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.customer_id <span class="op">=</span> c.customer_id</span>
-<span id="cb44-15"><a href="sql_joins.html#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb46-1"><a href="sql_joins.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_id,</span>
+<span id="cb46-2"><a href="sql_joins.html#cb46-2" aria-hidden="true" tabindex="-1"></a>        c.customer_first_name,</span>
+<span id="cb46-3"><a href="sql_joins.html#cb46-3" aria-hidden="true" tabindex="-1"></a>        c.customer_last_name,</span>
+<span id="cb46-4"><a href="sql_joins.html#cb46-4" aria-hidden="true" tabindex="-1"></a>        c.customer_zip,</span>
+<span id="cb46-5"><a href="sql_joins.html#cb46-5" aria-hidden="true" tabindex="-1"></a>        cp.product_id,</span>
+<span id="cb46-6"><a href="sql_joins.html#cb46-6" aria-hidden="true" tabindex="-1"></a>        cp.vendor_id,</span>
+<span id="cb46-7"><a href="sql_joins.html#cb46-7" aria-hidden="true" tabindex="-1"></a>        cp.market_date, </span>
+<span id="cb46-8"><a href="sql_joins.html#cb46-8" aria-hidden="true" tabindex="-1"></a>        cp.customer_id,</span>
+<span id="cb46-9"><a href="sql_joins.html#cb46-9" aria-hidden="true" tabindex="-1"></a>        cp.quantity,</span>
+<span id="cb46-10"><a href="sql_joins.html#cb46-10" aria-hidden="true" tabindex="-1"></a>        cp.cost_to_customer_per_qty,</span>
+<span id="cb46-11"><a href="sql_joins.html#cb46-11" aria-hidden="true" tabindex="-1"></a>        cp.transaction_time </span>
+<span id="cb46-12"><a href="sql_joins.html#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp </span>
+<span id="cb46-13"><a href="sql_joins.html#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> customer <span class="kw">AS</span> c</span>
+<span id="cb46-14"><a href="sql_joins.html#cb46-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb46-15"><a href="sql_joins.html#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-9">Table 3.1: </span>10 records</caption>
@@ -1020,21 +1057,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="answer-13" class="section level4 unnumbered">
 <h4>Answer</h4>
 <p>I believe this code would get you most of the way there. You just need a way of summarising the range of market_date for each product, which it looks like we might learn in the next chapter.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb45-1"><a href="sql_joins.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id,</span>
-<span id="cb45-2"><a href="sql_joins.html#cb45-2" aria-hidden="true" tabindex="-1"></a>        p.product_name,</span>
-<span id="cb45-3"><a href="sql_joins.html#cb45-3" aria-hidden="true" tabindex="-1"></a>        pc.product_category_name,</span>
-<span id="cb45-4"><a href="sql_joins.html#cb45-4" aria-hidden="true" tabindex="-1"></a>        vi.market_date</span>
-<span id="cb45-5"><a href="sql_joins.html#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p</span>
-<span id="cb45-6"><a href="sql_joins.html#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc</span>
-<span id="cb45-7"><a href="sql_joins.html#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
-<span id="cb45-8"><a href="sql_joins.html#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> vendor_inventory <span class="kw">AS</span> vi</span>
-<span id="cb45-9"><a href="sql_joins.html#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_id <span class="op">=</span> vi.product_id</span>
-<span id="cb45-10"><a href="sql_joins.html#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">LOWER</span>(product_category_name) <span class="kw">LIKE</span> <span class="ot">&quot;%fruit%&quot;</span></span>
-<span id="cb45-11"><a href="sql_joins.html#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name, market_date</span>
-<span id="cb45-12"><a href="sql_joins.html#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb47-1"><a href="sql_joins.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> p.product_id,</span>
+<span id="cb47-2"><a href="sql_joins.html#cb47-2" aria-hidden="true" tabindex="-1"></a>        p.product_name,</span>
+<span id="cb47-3"><a href="sql_joins.html#cb47-3" aria-hidden="true" tabindex="-1"></a>        pc.product_category_name,</span>
+<span id="cb47-4"><a href="sql_joins.html#cb47-4" aria-hidden="true" tabindex="-1"></a>        vi.market_date</span>
+<span id="cb47-5"><a href="sql_joins.html#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p</span>
+<span id="cb47-6"><a href="sql_joins.html#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc</span>
+<span id="cb47-7"><a href="sql_joins.html#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
+<span id="cb47-8"><a href="sql_joins.html#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> vendor_inventory <span class="kw">AS</span> vi</span>
+<span id="cb47-9"><a href="sql_joins.html#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_id <span class="op">=</span> vi.product_id</span>
+<span id="cb47-10"><a href="sql_joins.html#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">LOWER</span>(product_category_name) <span class="kw">LIKE</span> <span class="ot">&quot;%fruit%&quot;</span></span>
+<span id="cb47-11"><a href="sql_joins.html#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name, market_date</span>
+<span id="cb47-12"><a href="sql_joins.html#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
 <div class="knitsql-table">
-<table>
+<table style="width:100%;">
 <caption><span id="tab:unnamed-chunk-10">Table 3.2: </span>10 records</caption>
+<colgroup>
+<col width="14%" />
+<col width="37%" />
+<col width="33%" />
+<col width="15%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="right">product_id</th>

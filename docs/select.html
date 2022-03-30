@@ -5,26 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 The SELECT Statement | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
-  <meta name="description" content="My Notes on ‘SQL for Data Scientists.’" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 The SELECT Statement | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 2 The SELECT Statement | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
-  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
 
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-08" />
+<meta name="date" content="2022-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,7 @@
   
 <link rel="prev" href="data_sources.html"/>
 <link rel="next" href="where.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,8 +189,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-1-5"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-2-5"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-3-4"><i class="fa fa-check"></i>Ex. 3</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-1-6"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-2-6"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-3-5"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#ex.-1-7"><i class="fa fa-check"></i>Ex. 1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -219,10 +238,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.1</span> Chapter Notes</h2>
 <p>The next few chapters introduce basic SQL syntax.</p>
 <p>Here’s a very simple example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="select.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="select.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-2">Table 2.1: </span>Displaying records 1 - 5</caption>
+<colgroup>
+<col width="12%" />
+<col width="30%" />
+<col width="14%" />
+<col width="22%" />
+<col width="19%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">product_id</th>
@@ -271,13 +297,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
-<p>We’ve selected all columns from the table named “product,” and I’ve used R Markdown’s knit options to limit the results displayed to the first five rows. We can use SQL’s LIMIT clause for the same effect:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="select.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
-<span id="cb5-2"><a href="select.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span>
-<span id="cb5-3"><a href="select.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<p>We’ve selected all columns from the table named “product”, and I’ve used R Markdown’s knit options to limit the results displayed to the first five rows. We can use SQL’s LIMIT clause for the same effect:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="select.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb7-2"><a href="select.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span>
+<span id="cb7-3"><a href="select.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-3">Table 0.1: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-3">Table 2.2: </span>5 records</caption>
+<colgroup>
+<col width="12%" />
+<col width="30%" />
+<col width="14%" />
+<col width="22%" />
+<col width="19%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">product_id</th>
@@ -328,12 +361,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Line breaks, tabs and spaces are treated the same by SQL. Usually adding line breaks makes for more legible code.</p>
 <p>Instead of asking for all columns, we can specify the ones we want in the SELECT clause:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="select.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name </span>
-<span id="cb6-2"><a href="select.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span>
-<span id="cb6-3"><a href="select.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="select.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name </span>
+<span id="cb8-2"><a href="select.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product</span>
+<span id="cb8-3"><a href="select.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-4">Table 2.2: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-4">Table 2.3: </span>5 records</caption>
 <thead>
 <tr class="header">
 <th align="left">product_id</th>
@@ -365,13 +398,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </div>
 <p>The chapter introduces the ORDER BY clause:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="select.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name </span>
-<span id="cb7-2"><a href="select.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product </span>
-<span id="cb7-3"><a href="select.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name</span>
-<span id="cb7-4"><a href="select.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="select.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name </span>
+<span id="cb9-2"><a href="select.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product </span>
+<span id="cb9-3"><a href="select.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name</span>
+<span id="cb9-4"><a href="select.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 2.3: </span>5 records</caption>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>5 records</caption>
 <thead>
 <tr class="header">
 <th align="right">product_id</th>
@@ -403,10 +436,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </div>
 <p>The default ASC behaviour sorts text alphabetically and numbers from low to high, but we can also use the DESC behaviour:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="select.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name </span>
-<span id="cb8-2"><a href="select.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product </span>
-<span id="cb8-3"><a href="select.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name <span class="kw">DESC</span></span>
-<span id="cb8-4"><a href="select.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="select.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, product_name </span>
+<span id="cb10-2"><a href="select.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.product </span>
+<span id="cb10-3"><a href="select.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name <span class="kw">DESC</span></span>
+<span id="cb10-4"><a href="select.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-6">Table 2.4: </span>5 records</caption>
@@ -441,10 +474,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 </div>
 <p>We can also sort on multiple columns. The code below sorts first on market date and then on vendor ID:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="select.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, vendor_id, booth_number </span>
-<span id="cb9-2"><a href="select.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor_booth_assignments </span>
-<span id="cb9-3"><a href="select.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date, vendor_id</span>
-<span id="cb9-4"><a href="select.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="select.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, vendor_id, booth_number </span>
+<span id="cb11-2"><a href="select.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.vendor_booth_assignments </span>
+<span id="cb11-3"><a href="select.html#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date, vendor_id</span>
+<span id="cb11-4"><a href="select.html#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-7">Table 2.5: </span>5 records</caption>
@@ -484,10 +517,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
-<p>We can also do simple calculations on the columns from within the SELECT clause. The code below contains two calculatios like this. First, the columns quantity and cost_to_customer_per_qty are multiplied together and the AS keyword is used to give the resulting column the <em>alias</em> price. The the <em>function</em> ROUND is used to round the resulting price column to 2 digits after the decimal point. The ROUND function also accepts negative numbers to round digits to the left of the decimal point.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="select.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, vendor_id, <span class="fu">ROUND</span>(quantity <span class="op">*</span> cost_to_customer_per_qty,<span class="dv">2</span>) <span class="kw">AS</span> price</span>
-<span id="cb10-2"><a href="select.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span>
-<span id="cb10-3"><a href="select.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<p>We can also do simple calculations on the columns from within the SELECT clause. The code below contains two calculations like this. First, the columns quantity and cost_to_customer_per_qty are multiplied together. The the <em>function</em> ROUND is used to round the resulting price column to 2 digits after the decimal point. The ROUND function also accepts negative numbers to round digits to the left of the decimal point. The AS keyword is used to give the resulting column the <em>alias</em> price</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb12-1"><a href="select.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, vendor_id, <span class="fu">ROUND</span>(quantity <span class="op">*</span> cost_to_customer_per_qty,<span class="dv">2</span>) <span class="kw">AS</span> price</span>
+<span id="cb12-2"><a href="select.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span>
+<span id="cb12-3"><a href="select.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-8">Table 2.6: </span>5 records</caption>
@@ -535,10 +568,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Another common function is the CONCAT function, which can be used inside the SELECT statement to e.g. combine first and last names into a single column like so: CONCAT(customer_first_name, ” “, customer_last_name) AS customer_name. The UPPER function puts text values in all caps.</p>
 <p>There is then a section about using the query editor in MySQL workbench to perform some basic checks on your query. I did a little of that but obviously can’t display that here. One option that R Markdown allows for though is to assign the result of your query to some R object using the output.var option. Here I’ve included output.var=“transactions” in the SQL chunk options and when I run the query:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="select.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, vendor_id, <span class="fu">ROUND</span>(quantity <span class="op">*</span> cost_to_customer_per_qty, <span class="dv">2</span>) <span class="kw">AS</span> price</span>
-<span id="cb11-2"><a href="select.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb13-1"><a href="select.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, vendor_id, <span class="fu">ROUND</span>(quantity <span class="op">*</span> cost_to_customer_per_qty, <span class="dv">2</span>) <span class="kw">AS</span> price</span>
+<span id="cb13-2"><a href="select.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span></code></pre></div>
 <p>I get a data frame with 4,221 rows, and I can then use standard R functions to check if the query is returning results as expected. E.g.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="select.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(transactions<span class="sc">$</span>market_date)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="select.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">range</span>(transactions<span class="sc">$</span>market_date)</span></code></pre></div>
 <pre><code>## [1] &quot;2019-04-03&quot; &quot;2020-10-10&quot;</code></pre>
 </div>
 <div id="exercises-1" class="section level2" number="2.2">
@@ -553,8 +586,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="answer-2" class="section level4 unnumbered">
 <h4>Answer</h4>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb14-1"><a href="select.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb14-2"><a href="select.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb16-1"><a href="select.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb16-2"><a href="select.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer</span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-11">Table 2.7: </span>26 records</caption>
@@ -738,10 +771,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="answer-3" class="section level4 unnumbered">
 <h4>Answer</h4>
-<div class="sourceCode" id="cb15"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb15-1"><a href="select.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb15-2"><a href="select.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer</span>
-<span id="cb15-3"><a href="select.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_last_name, customer_first_name</span>
-<span id="cb15-4"><a href="select.html#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb17-1"><a href="select.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb17-2"><a href="select.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer</span>
+<span id="cb17-3"><a href="select.html#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_last_name, customer_first_name</span>
+<span id="cb17-4"><a href="select.html#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-12">Table 2.8: </span>10 records</caption>
@@ -829,9 +862,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="answer-4" class="section level4 unnumbered">
 <h4>Answer</h4>
-<div class="sourceCode" id="cb16"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb16-1"><a href="select.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, customer_first_name</span>
-<span id="cb16-2"><a href="select.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer</span>
-<span id="cb16-3"><a href="select.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_first_name</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb18-1"><a href="select.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, customer_first_name</span>
+<span id="cb18-2"><a href="select.html#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer</span>
+<span id="cb18-3"><a href="select.html#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_first_name</span></code></pre></div>
 <div class="knitsql-table">
 <table>
 <caption><span id="tab:unnamed-chunk-13">Table 2.9: </span>26 records</caption>

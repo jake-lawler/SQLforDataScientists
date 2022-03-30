@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Data Sources | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
+  <title>Chapter 8 Date and Time Functions | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
   <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Data Sources | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta property="og:title" content="Chapter 8 Date and Time Functions | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Data Sources | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta name="twitter:title" content="Chapter 8 Date and Time Functions | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
   <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="select.html"/>
+<link rel="prev" href="window_functions.html"/>
+
 <script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -232,64 +232,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data_sources" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Data Sources</h1>
-<div id="chapter-notes" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Chapter Notes</h2>
-<p>The chapter introduces the basics of relational databases. The concepts include:</p>
-<ul>
-<li>One-to-many relationships between tables. E.g. for a doctor’s office database a patient will appear once in the Patients table but may appear many times in the Appointments table</li>
-<li>Entity-Relationship Diagrams (ERDs). E.g.</li>
-</ul>
-<p><img src="images/Ch01Img01.png" /></p>
-<ul>
-<li>Primary Keys - a column or collection of columns that serves to uniquely identify each row in a table.</li>
-<li>Foreign Key - when a table’s primary key is referenced in another table. E.g. when Patient ID appears in the Appointments table.</li>
-<li>Many-to-many relationships. E.g. between a Books table and an Authors table.</li>
-<li>A junction or associative table - these are used to match up primary keys for many-to-many relationships to reduce the amount of redundant data stored. Here’s a diagram to explain:</li>
-</ul>
-<p><img src="images/Ch01Img02.png" /></p>
-<p>Here a single asterisk picks out the primary key, a double asterisk means that column is a foreign key. A book with multiple authors will have multiple rows in the junction table, instead of multiple rows in the books table where a lot more data would have to be repeated.</p>
-<ul>
-<li>Database normalisation - structuring a database so as to minimise redundant data storage.</li>
-<li>Dimensional model - a way of structuring a database into fact and dimension tables. The chapter explains:</li>
-</ul>
-<blockquote>
-<p>So, for example, a transactional record of an item purchased at a retail store is a fact, containing the timestamp of the purchase, the store number, order number, customer number, and the amount paid. The store the purchase was made at is a dimension of the item purchase fact, and the associated store dimension table would contain additional information about the store, such as its name. You could then query both the fact and the dimension tables to get a summary of purchases by store.</p>
-</blockquote>
-<p>The chapter then has a nice section about some of the questions you may want to ask when first being introduced to a data source, before going on to describe the Farmer’s Market database that will be used over the rest of the book. Here’s the ERD:</p>
-<p><img src="images/Ch01Img03.png" /></p>
+<div id="date_time" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Date and Time Functions</h1>
+<div id="chapter-notes-7" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Chapter Notes</h2>
 </div>
-<div id="exercises" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Exercises</h2>
-<div id="ex.-1" class="section level3 unnumbered">
+<div id="exercises-7" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Exercises</h2>
+<div id="ex.-1-7" class="section level3 unnumbered">
 <h3>Ex. 1</h3>
-<div id="question" class="section level4 unnumbered">
+<div id="question-20" class="section level4 unnumbered">
 <h4>Question</h4>
-<blockquote>
-<p>What do you think will happen in the described Books and Authors database depicted in Figure 1.5 if an author changes their name? Which records might be added or updated, and what might be the effect on the results of future queries based on this data?</p>
-</blockquote>
 </div>
-<div id="answer" class="section level4 unnumbered">
+<div id="answer-20" class="section level4 unnumbered">
 <h4>Answer</h4>
-<p>If we wanted to completely overwrite the author’s previous name, nothing in the Books table would need to change. The Author ID wouldn’t need to change, and so nothing in the junction table would need to change. Only the entry for Author Full Name in the Authors table would need to be altered. In this case database normalisation has made updating the author name straightforward.</p>
-<p>However I believe the question is getting at the case where an author writes a book under one name, and then changes their name before releasing a new book. We want to keep both names in this database, each associated with the respective books. This could be accomplished by adding a new Author ID and a new row in the Authors table. However this could mislead us for some future queries - e.g. if we wanted to ask the average number of books written by each author, our query might count this as two authors with (say) one book each instead of the same author with two books. We can’t have the same Author ID attached to each of the two names - Author ID is our primary key. Perhaps there is some other way to represent in our database that these two names refer to the same person.</p>
 </div>
 </div>
-<div id="ex.-2" class="section level3 unnumbered">
-<h3>Ex. 2</h3>
-<div id="question-1" class="section level4 unnumbered">
-<h4>Question</h4>
-<blockquote>
-<p>Think of something in your life that you could track using a database. What entities in this database might have one-to-many relationships with one another? Many-to-many?</p>
-</blockquote>
 </div>
-<div id="answer-1" class="section level4 unnumbered">
-<h4>Answer</h4>
-<p>If I were so inclined, I could keep track of data about my walks and turn this into a database. E.g. what species of birds I see - I think this would be a many-to-many relationship, on each walk I see multiple species of birds and I might see each species on multiple walks. An example of one-to-many might be weather. I.e. it might be rainy on multiple different walks but each walk will only have one type of weather. Although that last part probably does not reflect the reality of being outside in Scotland.</p>
+<div id="further-reading" class="section level2 unnumbered">
+<h2>Further Reading</h2>
 
-</div>
-</div>
 </div>
 </div>
             </section>
@@ -297,8 +259,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="select.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="window_functions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -329,7 +291,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-data_sources.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/08-date_time.Rmd",
 "text": "Edit"
 },
 "history": {

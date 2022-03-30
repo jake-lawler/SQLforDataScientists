@@ -5,26 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Aggregating Results for Analysis | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
-  <meta name="description" content="My Notes on ‘SQL for Data Scientists.’" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Aggregating Results for Analysis | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 6 Aggregating Results for Analysis | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
-  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists.’" />
+  <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
 
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-08" />
+<meta name="date" content="2022-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,8 +31,8 @@
   
   
 <link rel="prev" href="sql_joins.html"/>
-
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<link rel="next" href="window_functions.html"/>
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -190,8 +189,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
 <ul>
 <li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-1-5"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-2-5"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#ex.-3-4"><i class="fa fa-check"></i>Ex. 3</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-1-6"><i class="fa fa-check"></i>Ex. 1</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-2-6"><i class="fa fa-check"></i>Ex. 2</a></li>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#ex.-3-5"><i class="fa fa-check"></i>Ex. 3</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
+<li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#ex.-1-7"><i class="fa fa-check"></i>Ex. 1</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -217,6 +236,489 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 6</span> Aggregating Results for Analysis</h1>
 <div id="chapter-notes-5" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Chapter Notes</h2>
+<p>This chapter is all about aggregating and summarising data. It introduces the GROUP BY clause.</p>
+<p>This query returns the dates and customer IDs of all purchases:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb48-1"><a href="aggregating.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id</span>
+<span id="cb48-2"><a href="aggregating.html#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases</span>
+<span id="cb48-3"><a href="aggregating.html#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date, customer_id</span>
+<span id="cb48-4"><a href="aggregating.html#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 2.1: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can see two purchases by customer 5 on 2019-04-03. We can use the GROUP BY clause to gather those two rows together, by grouping on market_date and customer_id. With no further changes to the query, this would do the same thing as SELECT DISTINCT. However with a summarising function, we can display more useful information:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb49-1"><a href="aggregating.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> items_purchased</span>
+<span id="cb49-2"><a href="aggregating.html#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases </span>
+<span id="cb49-3"><a href="aggregating.html#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date, customer_id </span>
+<span id="cb49-4"><a href="aggregating.html#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date, customer_id</span>
+<span id="cb49-5"><a href="aggregating.html#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-3">Table 2.2: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+<th align="right">items_purchased</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">5</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">6</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here the COUNT function counts the number of rows in each market_date and customer_id grouping, as displays that in a new column. We can now see more readily that customer 5 made two purchases on March 3rd.</p>
+<p>We can use other summarising functions. For example, for each purchase the table records the quantity of items purchased. We can create a column displaying that instead of the number of distinct purchases:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb50-1"><a href="aggregating.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, <span class="fu">SUM</span>(quantity) <span class="kw">AS</span> items_purchased</span>
+<span id="cb50-2"><a href="aggregating.html#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases </span>
+<span id="cb50-3"><a href="aggregating.html#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date, customer_id </span>
+<span id="cb50-4"><a href="aggregating.html#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date, customer_id</span>
+<span id="cb50-5"><a href="aggregating.html#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 2.3: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+<th align="right">items_purchased</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">5</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-03</td>
+<td align="right">6</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">7</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>So customer made 5 2 distinct purchases but bought 4 different items over those two purchases.</p>
+<p>The chapter recommends running a query like this without the summarising function first, in order to check that it’s doing what you think it is. In the query above, the quantity column for some products is recorded by weight instead of number of items, so the results may not be as expected. Similarly when aggregating on joins it’s a good idea to perform the join first and check that it’s working as expected before aggregating anything.</p>
+<p>We can also perform row-level calculations that are then aggregated by our summarising functions. For example, here is the query to return how much customer 3 spent at the market on each date:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb51-1"><a href="aggregating.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, <span class="fu">SUM</span>(quantity<span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> total_spent</span>
+<span id="cb51-2"><a href="aggregating.html#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span>
+<span id="cb51-3"><a href="aggregating.html#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> customer_id <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb51-4"><a href="aggregating.html#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date, customer_id</span>
+<span id="cb51-5"><a href="aggregating.html#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> market_date</span>
+<span id="cb51-6"><a href="aggregating.html#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>10 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+<th align="right">total_spent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="right">3</td>
+<td align="right">4.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-13</td>
+<td align="right">3</td>
+<td align="right">56.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-04-24</td>
+<td align="right">3</td>
+<td align="right">20.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-04-27</td>
+<td align="right">3</td>
+<td align="right">72.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-01</td>
+<td align="right">3</td>
+<td align="right">52.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-08</td>
+<td align="right">3</td>
+<td align="right">12.0</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-11</td>
+<td align="right">3</td>
+<td align="right">108.0</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-15</td>
+<td align="right">3</td>
+<td align="right">24.5</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-05-22</td>
+<td align="right">3</td>
+<td align="right">96.5</td>
+</tr>
+<tr class="even">
+<td align="left">2019-05-29</td>
+<td align="right">3</td>
+<td align="right">19.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here’s an example of aggregating on a join. We combine three tables (customer purchases, customer, vendor) to get the names of customers and how much they spent in total at each vendor over the entire time period we have data for. We then sort highest to lowest.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb52-1"><a href="aggregating.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> cp.customer_id, c.customer_first_name, c.customer_last_name, vendor_name, </span>
+<span id="cb52-2"><a href="aggregating.html#cb52-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">SUM</span>(quantity<span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> total_spent</span>
+<span id="cb52-3"><a href="aggregating.html#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb52-4"><a href="aggregating.html#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> customer <span class="kw">AS</span> c</span>
+<span id="cb52-5"><a href="aggregating.html#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb52-6"><a href="aggregating.html#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> vendor <span class="kw">AS</span> v</span>
+<span id="cb52-7"><a href="aggregating.html#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.vendor_id <span class="op">=</span> v.vendor_id</span>
+<span id="cb52-8"><a href="aggregating.html#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> customer_id, vendor_name</span>
+<span id="cb52-9"><a href="aggregating.html#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> total_spent <span class="kw">DESC</span></span>
+<span id="cb52-10"><a href="aggregating.html#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 2.4: </span>5 records</caption>
+<colgroup>
+<col width="15%" />
+<col width="26%" />
+<col width="25%" />
+<col width="17%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">customer_id</th>
+<th align="left">customer_first_name</th>
+<th align="left">customer_last_name</th>
+<th align="left">vendor_name</th>
+<th align="right">total_spent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">Abigail</td>
+<td align="left">Harris</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2728.0</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">Bob</td>
+<td align="left">Wilson</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2722.0</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">Manuel</td>
+<td align="left">Diaz</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2650.5</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">Norma</td>
+<td align="left">Valenzuela</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2646.0</td>
+</tr>
+<tr class="odd">
+<td align="right">24</td>
+<td align="left">Dawn</td>
+<td align="left">Nale</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2634.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>There is more than one vendor in the results of that query, it’s just that people appear to be spending a large amount of money on Annie’s Pies.</p>
+<p>Other possible functions we might want to use on grouped results include:</p>
+<ul>
+<li>MAX and MIN (e.g. to find the most expensive produce in each category),</li>
+<li>We saw COUNT above but we can also use COUNT DISTINCT when we want to count unique rows only. The syntax works like so: COUNT(DISTINCT product_id),</li>
+<li>AVG, for the average</li>
+</ul>
+<p>The next section of the chapter introduces the HAVING clause, which is used for filtering after aggregation. It goes after the GROUP BY clause.</p>
+<p>The following query returns the total amount each customer spent at each vendor, and then filters for total amount over $1,000.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb53-1"><a href="aggregating.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_id, vendor_name, <span class="fu">SUM</span>(quantity <span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> total_spent</span>
+<span id="cb53-2"><a href="aggregating.html#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb53-3"><a href="aggregating.html#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> vendor <span class="kw">AS</span> v</span>
+<span id="cb53-4"><a href="aggregating.html#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.vendor_id <span class="op">=</span> v.vendor_id</span>
+<span id="cb53-5"><a href="aggregating.html#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> customer_id, vendor_name</span>
+<span id="cb53-6"><a href="aggregating.html#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> total_spent <span class="op">&gt;=</span> <span class="dv">1000</span></span>
+<span id="cb53-7"><a href="aggregating.html#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_id, vendor_name</span>
+<span id="cb53-8"><a href="aggregating.html#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 2.5: </span>10 records</caption>
+<thead>
+<tr class="header">
+<th align="right">customer_id</th>
+<th align="left">vendor_name</th>
+<th align="right">total_spent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2311.000</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">Marco’s Peppers</td>
+<td align="right">1131.219</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2650.500</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">Marco’s Peppers</td>
+<td align="right">1457.053</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2722.000</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="left">Marco’s Peppers</td>
+<td align="right">1031.257</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2002.000</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">Marco’s Peppers</td>
+<td align="right">1412.429</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">Annie’s Pies</td>
+<td align="right">2728.000</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="left">Marco’s Peppers</td>
+<td align="right">1159.627</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here’s a tip from the chapter:
+&gt; If you GROUP BY all of the fields that are supposed to be distinct in your resulting dataset, then add a HAVING clause that filters to aggregated rows with a COUNT(*) &gt; 1 , any results returned indicate that there is more than one row with your “unique” combination of values, highlighting the existence of unwanted duplicates in your
+database or query results!</p>
+<p>The next section discusses CASE statements inside aggregating functions. We learned above that the quantity column in the customer_purchases table is sometimes in lbs and sometimes in units (e.g. 1 tomato). We can use CASE statements so that only products with the same units are summed together.</p>
+<p>This query returns the total quantity of items purchased per customer per day, separated by units. I’ve order it by quantity in lbs from highest to lowest.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb54-1"><a href="aggregating.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> cp.market_date,cp.customer_id,</span>
+<span id="cb54-2"><a href="aggregating.html#cb54-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> product_qty_type <span class="op">=</span> <span class="ot">&quot;unit&quot;</span> </span>
+<span id="cb54-3"><a href="aggregating.html#cb54-3" aria-hidden="true" tabindex="-1"></a>          <span class="cf">THEN</span> quantity </span>
+<span id="cb54-4"><a href="aggregating.html#cb54-4" aria-hidden="true" tabindex="-1"></a>          <span class="cf">ELSE</span> <span class="dv">0</span> </span>
+<span id="cb54-5"><a href="aggregating.html#cb54-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">END</span>) <span class="kw">AS</span> quantity_units, </span>
+<span id="cb54-6"><a href="aggregating.html#cb54-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> product_qty_type <span class="op">=</span> <span class="ot">&quot;lbs&quot;</span> </span>
+<span id="cb54-7"><a href="aggregating.html#cb54-7" aria-hidden="true" tabindex="-1"></a>          <span class="cf">THEN</span> quantity </span>
+<span id="cb54-8"><a href="aggregating.html#cb54-8" aria-hidden="true" tabindex="-1"></a>          <span class="cf">ELSE</span> <span class="dv">0</span> </span>
+<span id="cb54-9"><a href="aggregating.html#cb54-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">END</span>) <span class="kw">AS</span> quantity_lbs</span>
+<span id="cb54-10"><a href="aggregating.html#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> farmers_market.customer_purchases <span class="kw">AS</span> cp </span>
+<span id="cb54-11"><a href="aggregating.html#cb54-11" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> farmers_market.product <span class="kw">AS</span> p</span>
+<span id="cb54-12"><a href="aggregating.html#cb54-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.product_id <span class="op">=</span> p.product_id</span>
+<span id="cb54-13"><a href="aggregating.html#cb54-13" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> market_date, customer_id </span>
+<span id="cb54-14"><a href="aggregating.html#cb54-14" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> quantity_lbs <span class="kw">DESC</span></span>
+<span id="cb54-15"><a href="aggregating.html#cb54-15" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-8">Table 2.6: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+<th align="right">quantity_units</th>
+<th align="right">quantity_lbs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2020-09-19</td>
+<td align="right">15</td>
+<td align="right">8</td>
+<td align="right">11.98</td>
+</tr>
+<tr class="even">
+<td align="left">2019-07-13</td>
+<td align="right">10</td>
+<td align="right">10</td>
+<td align="right">11.32</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-07-11</td>
+<td align="right">18</td>
+<td align="right">0</td>
+<td align="right">11.10</td>
+</tr>
+<tr class="even">
+<td align="left">2020-08-22</td>
+<td align="right">5</td>
+<td align="right">8</td>
+<td align="right">10.81</td>
+</tr>
+<tr class="odd">
+<td align="left">2019-07-13</td>
+<td align="right">2</td>
+<td align="right">12</td>
+<td align="right">10.51</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>So customer 15 bought almost 12 pounds of items on 2020-09-19, as well as 8 units of other products. Let’s see what they were:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb55-1"><a href="aggregating.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> market_date, customer_id, product_name, quantity, product_qty_type </span>
+<span id="cb55-2"><a href="aggregating.html#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb55-3"><a href="aggregating.html#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product <span class="kw">AS</span> p</span>
+<span id="cb55-4"><a href="aggregating.html#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.product_id <span class="op">=</span> p.product_id</span>
+<span id="cb55-5"><a href="aggregating.html#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> customer_id <span class="op">=</span> <span class="dv">15</span> <span class="kw">AND</span> market_date <span class="op">=</span> <span class="ot">&quot;2020-09-19&quot;</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 3.1: </span>5 records</caption>
+<colgroup>
+<col width="15%" />
+<col width="15%" />
+<col width="35%" />
+<col width="11%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">market_date</th>
+<th align="right">customer_id</th>
+<th align="left">product_name</th>
+<th align="right">quantity</th>
+<th align="left">product_qty_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2020-09-19</td>
+<td align="right">15</td>
+<td align="left">Habanero Peppers - Organic</td>
+<td align="right">3.04</td>
+<td align="left">lbs</td>
+</tr>
+<tr class="even">
+<td align="left">2020-09-19</td>
+<td align="right">15</td>
+<td align="left">Habanero Peppers - Organic</td>
+<td align="right">5.06</td>
+<td align="left">lbs</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-09-19</td>
+<td align="right">15</td>
+<td align="left">Jalapeno Peppers - Organic</td>
+<td align="right">3.88</td>
+<td align="left">lbs</td>
+</tr>
+<tr class="even">
+<td align="left">2020-09-19</td>
+<td align="right">15</td>
+<td align="left">Poblano Peppers - Organic</td>
+<td align="right">3.00</td>
+<td align="left">unit</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-09-19</td>
+<td align="right">15</td>
+<td align="left">Banana Peppers - Jar</td>
+<td align="right">5.00</td>
+<td align="left">unit</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Damn. A pepper fiend.</p>
 </div>
 <div id="exercises-5" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Exercises</h2>
@@ -224,15 +726,258 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Ex. 1</h3>
 <div id="question-14" class="section level4 unnumbered">
 <h4>Question</h4>
+<blockquote>
+<p>Write a query that determines how many times each vendor has rented a booth at the farmer’s market. In other words, count the vendor booth assignments per vendor_id .</p>
+</blockquote>
 </div>
 <div id="answer-14" class="section level4 unnumbered">
 <h4>Answer</h4>
+<div class="sourceCode" id="cb56"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb56-1"><a href="aggregating.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> vendor_id, <span class="fu">COUNT</span>(booth_number) <span class="kw">AS</span> total_assignments</span>
+<span id="cb56-2"><a href="aggregating.html#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_booth_assignments</span>
+<span id="cb56-3"><a href="aggregating.html#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> vendor_id</span>
+<span id="cb56-4"><a href="aggregating.html#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> vendor_id</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-10">Table 3.2: </span>6 records</caption>
+<thead>
+<tr class="header">
+<th align="right">vendor_id</th>
+<th align="right">total_assignments</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">142</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">142</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">211</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="right">142</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">142</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="right">142</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
-<div id="further-reading" class="section level2 unnumbered">
-<h2>Further Reading</h2>
+<div id="ex.-2-5" class="section level3 unnumbered">
+<h3>Ex. 2</h3>
+<div id="question-15" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>In Chapter 5, “SQL Joins,” Exercise 3, we asked “When is each type of fresh fruit or vegetable in season, locally?” Write a query that displays the product category name, product name, earliest date available, and latest date available for every product in the “Fresh Fruits &amp; Vegetables” product category.</p>
+</blockquote>
+</div>
+<div id="answer-15" class="section level4 unnumbered">
+<h4>Answer</h4>
+<p>Adapting my answer from exercise three of the last chapter:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb57-1"><a href="aggregating.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span>  p.product_name,</span>
+<span id="cb57-2"><a href="aggregating.html#cb57-2" aria-hidden="true" tabindex="-1"></a>        pc.product_category_name,</span>
+<span id="cb57-3"><a href="aggregating.html#cb57-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">MIN</span>(vi.market_date) <span class="kw">AS</span> earliest_date_available,</span>
+<span id="cb57-4"><a href="aggregating.html#cb57-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">MAX</span>(vi.market_date) <span class="kw">AS</span> latest_date_available</span>
+<span id="cb57-5"><a href="aggregating.html#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product <span class="kw">AS</span> p</span>
+<span id="cb57-6"><a href="aggregating.html#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> product_category <span class="kw">AS</span> pc</span>
+<span id="cb57-7"><a href="aggregating.html#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_category_id <span class="op">=</span> pc.product_category_id</span>
+<span id="cb57-8"><a href="aggregating.html#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> vendor_inventory <span class="kw">AS</span> vi</span>
+<span id="cb57-9"><a href="aggregating.html#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> p.product_id <span class="op">=</span> vi.product_id</span>
+<span id="cb57-10"><a href="aggregating.html#cb57-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">LOWER</span>(product_category_name) <span class="kw">LIKE</span> <span class="ot">&quot;%fruit%&quot;</span> <span class="kw">AND</span> market_date <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb57-11"><a href="aggregating.html#cb57-11" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> product_name</span>
+<span id="cb57-12"><a href="aggregating.html#cb57-12" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> product_name, market_date</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-11">Table 2.7: </span>4 records</caption>
+<colgroup>
+<col width="27%" />
+<col width="26%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">product_name</th>
+<th align="left">product_category_name</th>
+<th align="left">earliest_date_available</th>
+<th align="left">latest_date_available</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Habanero Peppers - Organic</td>
+<td align="left">Fresh Fruits &amp; Vegetables</td>
+<td align="left">2019-07-03</td>
+<td align="left">2020-09-30</td>
+</tr>
+<tr class="even">
+<td align="left">Jalapeno Peppers - Organic</td>
+<td align="left">Fresh Fruits &amp; Vegetables</td>
+<td align="left">2019-07-03</td>
+<td align="left">2020-09-30</td>
+</tr>
+<tr class="odd">
+<td align="left">Poblano Peppers - Organic</td>
+<td align="left">Fresh Fruits &amp; Vegetables</td>
+<td align="left">2019-07-03</td>
+<td align="left">2020-09-30</td>
+</tr>
+<tr class="even">
+<td align="left">Sweet Corn</td>
+<td align="left">Fresh Fruits &amp; Vegetables</td>
+<td align="left">2019-06-01</td>
+<td align="left">2020-09-30</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>I don’t like that they all have the same end date, but a quick check reveals that the data does go further than that, just not for products in the Fresh Fruits category.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb58-1"><a href="aggregating.html#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span>  <span class="fu">MIN</span>(market_date) <span class="kw">AS</span> start_date, <span class="fu">MAX</span>(market_date) <span class="kw">AS</span> end_date </span>
+<span id="cb58-2"><a href="aggregating.html#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-12">Table 2.8: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="left">start_date</th>
+<th align="left">end_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="left">2020-10-10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>I also don’t like how the latest_date_available is more than one year after the earliest_date_available. The question is about seasonality, and so the earliest and latest dates should be within a year of each other. To fix this, we’ll need date functions, which are introduced in chapter 8.</p>
+</div>
+</div>
+<div id="ex.-3-4" class="section level3 unnumbered">
+<h3>Ex. 3</h3>
+<div id="question-16" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>The Farmer’s Market Customer Appreciation Committee wants to give a bumper sticker to everyone who has ever spent more than $50 at the market. Write a query that generates a list of customers for them to give stickers to, sorted by last name, then first name.</p>
+</blockquote>
+</div>
+<div id="answer-16" class="section level4 unnumbered">
+<h4>Answer</h4>
+<p>The question is slightly ambiguous. Does this mean $50 total or $50 in one transaction?</p>
+<p>Here’s the query for total amount, it looks like every customer in the database has spent well over $1,000:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb59-1"><a href="aggregating.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> c.customer_last_name, c.customer_first_name,</span>
+<span id="cb59-2"><a href="aggregating.html#cb59-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">SUM</span>(quantity<span class="op">*</span> cost_to_customer_per_qty) <span class="kw">AS</span> total_spent</span>
+<span id="cb59-3"><a href="aggregating.html#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb59-4"><a href="aggregating.html#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> customer <span class="kw">AS</span> c</span>
+<span id="cb59-5"><a href="aggregating.html#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb59-6"><a href="aggregating.html#cb59-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> customer_last_name, customer_first_name</span>
+<span id="cb59-7"><a href="aggregating.html#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> total_spent <span class="op">&gt;</span> <span class="dv">50</span></span>
+<span id="cb59-8"><a href="aggregating.html#cb59-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_last_name, customer_first_name</span>
+<span id="cb59-9"><a href="aggregating.html#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-13">Table 2.9: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">customer_last_name</th>
+<th align="left">customer_first_name</th>
+<th align="right">total_spent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Armenta</td>
+<td align="left">Jessica</td>
+<td align="right">2921.174</td>
+</tr>
+<tr class="even">
+<td align="left">Bullard</td>
+<td align="left">Betty</td>
+<td align="right">3016.465</td>
+</tr>
+<tr class="odd">
+<td align="left">Connor</td>
+<td align="left">Jane</td>
+<td align="right">3530.919</td>
+</tr>
+<tr class="even">
+<td align="left">Diaz</td>
+<td align="left">Carlos</td>
+<td align="right">1882.612</td>
+</tr>
+<tr class="odd">
+<td align="left">Diaz</td>
+<td align="left">Manuel</td>
+<td align="right">4179.453</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Here’s the query if we’re looking for at least $50 in one transaction:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb60-1"><a href="aggregating.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> customer_last_name, customer_first_name, <span class="fu">MAX</span>(quantity<span class="op">*</span>cost_to_customer_per_qty) <span class="kw">AS</span> most_spent</span>
+<span id="cb60-2"><a href="aggregating.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases <span class="kw">AS</span> cp</span>
+<span id="cb60-3"><a href="aggregating.html#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> customer <span class="kw">AS</span> c</span>
+<span id="cb60-4"><a href="aggregating.html#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> cp.customer_id <span class="op">=</span> c.customer_id</span>
+<span id="cb60-5"><a href="aggregating.html#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> customer_last_name, customer_first_name</span>
+<span id="cb60-6"><a href="aggregating.html#cb60-6" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> most_spent <span class="op">&gt;</span> <span class="dv">50</span></span>
+<span id="cb60-7"><a href="aggregating.html#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> customer_last_name, customer_first_name</span>
+<span id="cb60-8"><a href="aggregating.html#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-14">Table 3.3: </span>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">customer_last_name</th>
+<th align="left">customer_first_name</th>
+<th align="right">most_spent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Armenta</td>
+<td align="left">Jessica</td>
+<td align="right">54</td>
+</tr>
+<tr class="even">
+<td align="left">Bullard</td>
+<td align="left">Betty</td>
+<td align="right">54</td>
+</tr>
+<tr class="odd">
+<td align="left">Connor</td>
+<td align="left">Jane</td>
+<td align="right">54</td>
+</tr>
+<tr class="even">
+<td align="left">Diaz</td>
+<td align="left">Carlos</td>
+<td align="right">54</td>
+</tr>
+<tr class="odd">
+<td align="left">Diaz</td>
+<td align="left">Manuel</td>
+<td align="right">54</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Concerned about the frequency of $54 dollars but after checking it does look like the query ran successfully.</p>
 
+</div>
+</div>
 </div>
 </div>
             </section>
@@ -240,8 +985,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="sql_joins.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="sql_joins.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="window_functions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

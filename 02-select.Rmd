@@ -73,7 +73,7 @@ LIMIT 5
 ```
 
 
-We can also do simple calculations on the columns from within the SELECT clause. The code below contains two calculatios like this. First, the columns quantity and cost_to_customer_per_qty are multiplied together and the AS keyword is used to give the resulting column the *alias* price. The the *function* ROUND is used to round the resulting price column to 2 digits after the decimal point. The ROUND function also accepts negative numbers to round digits to the left of the decimal point.
+We can also do simple calculations on the columns from within the SELECT clause. The code below contains two calculations like this. First, the columns quantity and cost_to_customer_per_qty are multiplied together. The the *function* ROUND is used to round the resulting price column to 2 digits after the decimal point. The ROUND function also accepts negative numbers to round digits to the left of the decimal point. The AS keyword is used to give the resulting column the *alias* price
 
 ```{sql connection=con}
 SELECT market_date, customer_id, vendor_id, ROUND(quantity * cost_to_customer_per_qty,2) AS price
