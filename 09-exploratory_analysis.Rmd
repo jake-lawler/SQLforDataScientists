@@ -1,0 +1,136 @@
+# Exploratory Data Analysis with SQL {#exploratory_analysis}
+
+```{r echo = FALSE}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+## Chapter Notes
+
+This chapter doesn't introduce too much coding concepts. A lot of the example code in this chapter fits straightforwardly into what we've already seen. The purpose of the chapter is instead to suggest approaches to exploring a new data set.   
+
+The chapter provides examples of the kind of questions we might want to ask when we're first getting acquainted with a new database:
+
+>
+* How large are the tables, and how far back in time does the data go? 
+* What kind of information is available about each product and each purchase? 
+* What is the granularity of each of these tables; what makes a row unique?
+* Since we'll be looking at trends over time, what kind of date and time dimensions are available, and how do the different values look when summarized over time?
+* How is the data in each table related to the other tables? How might we join them together to summarize the details for reporting?
+
+MySQL has a statement called DESCRIBE that lists columns, their data types, and some other information. Not all database schemes have something like this however:
+
+```{sql connection=con}
+DESCRIBE customer_purchases
+```
+
+A good start in the absence of DESCRIBE is just to SELECT all columns from a table:
+
+```{sql connection=con}
+SELECT *
+FROM product
+LIMIT 10
+```
+
+We want to identify the primary key. It looks like it might be product_id, how can we check that each row is unique?
+
+```{sql connection=con}
+SELECT product_id, COUNT(*)
+FROM product
+GROUP BY product_id
+HAVING COUNT(*) >1
+```
+
+No guarantee that this means product_id is the primary key, but we can at least tell that currently each row is assigned a unique product_id.
+
+SELECT DISTINCT can be used to see the range of values a columns takes in a table.
+
+```{sql connection=con}
+SELECT DISTINCT product_qty_type
+FROM product
+```
+
+We can use MIN and MAX to find the range of a numeric variable.
+
+```{sql connection=con}
+SELECT MIN(market_date), MAX(market_date)
+FROM customer_purchases
+```
+
+The code below is used as an example of checking for changes in the data over time:
+
+```{sql connection=con}
+SELECT EXTRACT(YEAR FROM market_date) AS market_year, 
+        EXTRACT(MONTH FROM market_date) AS market_month, 
+        COUNT(DISTINCT vendor_id) AS vendors_with_inventory 
+FROM vendor_inventory 
+GROUP BY EXTRACT(YEAR FROM market_date), EXTRACT(MONTH FROM market_date)
+ORDER BY EXTRACT(YEAR FROM market_date), EXTRACT(MONTH FROM market_date)
+LIMIT 10
+```
+
+I won't include more examples from the chapter, but it does contain a lot of useful examples for EDA.
+
+
+## Exercises
+
+### Ex. 1 {-}
+
+#### Question {-}
+
+> In the chapter, it was suggested that we should see if the customer_purchases data was collected for the same time frame as the vendor_inventory table. Write a query that gets the earliest and latest dates in the customer_purchases table.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT MIN(market_date), MAX(market_date)
+FROM customer_purchases
+```
+
+The same range as for vendor_inventory.
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> There is a MySQL function DAYNAME() that returns the name of the day of the week for a date. Using the DAYNAME and EXTRACT functions on the customer_purchases table, select and group by the weekday and hour of the day, and count the distinct number of customers during each hour of the Wednesday and Saturday markets. See Chapters 6, “Aggregating Results for Analysis,” and 8, “Date and Time Functions,” for information on the COUNT DISTINCT and EXTRACT functions.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT DAYNAME(market_date) AS day, EXTRACT(HOUR FROM transaction_time) AS hour,
+        COUNT(DISTINCT customer_id) AS number_customers
+FROM customer_purchases
+GROUP BY day, hour
+ORDER BY day, hour
+```
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> What other questions haven't we yet asked about the data in these tables that you would be curious about? Write two more queries further exploring or summarizing the data in the product , vendor_inventory , or customer_purchases tables.
+
+#### Answer {-}
+
+
+## Further Reading {-}
+
+
+
+```{r echo = FALSE}
+# Disconnecting the database
+dbDisconnect(con)
+```

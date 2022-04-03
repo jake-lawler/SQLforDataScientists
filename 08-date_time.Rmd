@@ -19,6 +19,141 @@ knitr::opts_knit$set(sql.max.print = NA)
 
 ## Chapter Notes
 
+The chapter title is pretty self-explanatory for this one.
+
+The chapter opens by creating a demo table that will be used throughout the chapter. Here's the code to do that:
+
+```{sql connection=con, eval = FALSE}
+CREATE TABLE farmers_market.datetime_demo AS 
+(
+  SELECT market_date, 
+          market_start_time, 
+          market_end_time, 
+          STR_TO_DATE(CONCAT(market_date, ' ', market_start_time), '%Y-%m-%d %h:%i %p') AS market_start_datetime,
+          STR_TO_DATE(CONCAT(market_date, ' ', market_end_time), '%Y-%m-%d %h:%i %p') AS market_end_datetime 
+  FROM farmers_market.market_date_info
+)
+```
+
+Table creation is covered later, in chapter 14. The columns market_start_datetime and market_end_datetime are datetime values, converted from strings using the STR_TO_DATE function. We tell the function what format to expect with the string '%Y-%m-%d %h:%i %p'. Here's what the created table looks like:
+
+```{sql connection=con}
+SELECT *
+FROM datetime_demo
+LIMIT 5
+```
+
+The function name and syntax for the extracting part of a datetime value varies by database system. For MySQL it is EXTRACT, but it could be DATE_PART or DATEPART in other systems. MySQL also has DATE and TIME functions to extract those parts of a datetime value only. E.g.
+
+```{sql connection=con}
+SELECT market_start_datetime, 
+  EXTRACT(DAY FROM market_start_datetime) AS mktsrt_day, 
+  EXTRACT(MONTH FROM market_start_datetime) AS mktsrt_month, 
+  EXTRACT(YEAR FROM market_start_datetime) AS mktsrt_year, 
+  EXTRACT(HOUR FROM market_start_datetime) AS mktsrt_hour,
+  EXTRACT(MINUTE FROM market_start_datetime) AS mktsrt_minute,
+  DATE(market_start_datetime) AS mktsrt_date,
+  TIME(market_start_datetime) AS mktsrt_time
+FROM farmers_market.datetime_demo
+WHERE market_start_datetime = '2019-03-02 08:00:00'
+```
+
+The chapter introduces the DATE_ADD and DATE_SUB functions: 
+
+```{sql connection=con}
+SELECT market_start_datetime, 
+  DATE_ADD(market_start_datetime, INTERVAL 30 MINUTE) AS mktstrt_date_plus_30min,
+  DATE_ADD(market_start_datetime, INTERVAL 30 DAY) AS mktstrt_date_plus_30day,
+  DATE_SUB(
+    DATE(market_start_datetime), INTERVAL 30 DAY) AS mktstrt_day_minus_30day
+FROM farmers_market.datetime_demo
+WHERE market_start_datetime = '2019-03-02 08:00:00'
+```
+
+Instead of using DATE_SUB you can also use DATE_ADD with negative numbers.
+
+We can get the difference between two dates with the DATEDIFF function. The following code uses a subquery to find the first and last dates in the data and then finds the difference between them.
+
+```{sql connection=con}
+SELECT x.first_market, x.last_market, 
+        DATEDIFF(x.last_market, x.first_market) AS days_first_to_last
+FROM (
+  SELECT min(market_start_datetime) AS first_market, 
+          max(market_start_datetime) last_market 
+  FROM farmers_market.datetime_demo
+) AS x
+```
+
+A more general version of this function in MySQL TIMESTAMPDIFF, which returns answers in any chosen format e.g:
+
+```{sql connection=con}
+SELECT x.first_market, x.last_market, 
+        TIMESTAMPDIFF(HOUR, x.first_market, x.last_market) AS hours_first_to_last
+FROM (
+  SELECT min(market_start_datetime) AS first_market, 
+          max(market_start_datetime) last_market 
+  FROM farmers_market.datetime_demo
+) AS x
+```
+
+Notice that the syntax is reversed for start and end dates for DATEDIFF and TIMESTAMPDIFF. Other database systems allow specification of the interval in DATEDIFF.
+
+To get the current date, MySQL uses CURDATE, but other systems may use CURRENT_DATE, TODAY, SYSDATE, or GETDATE.
+
+The chapter describes using date functions with aggregates and window functions. For example, in the code below we use date functions with aggregation over customer_id: 
+
+```{sql connection=con}
+SELECT customer_id, 
+        MIN(market_date) AS first_purchase, 
+        MAX(market_date) AS last_purchase, 
+        COUNT(DISTINCT market_date) AS count_of_purchase_dates
+FROM farmers_market.customer_purchases
+GROUP BY customer_id
+LIMIT 5
+```
+
+And here is an example of date functions used with window functions:
+
+```{sql connection=con}
+SELECT customer_id, market_date, 
+        RANK() OVER (PARTITION BY customer_id ORDER BY market_date) AS purchase_number, 
+        LEAD(market_date,1) OVER (PARTITION BY customer_id ORDER BY market_date) AS next_purchase 
+FROM farmers_market.customer_purchases
+WHERE customer_id = 1
+LIMIT 5
+```
+
+For customer_id 1, we rank the purchases from earliest to latest, and then create a column with the date of the next purchase. We can use this to calculate the time between purchases. You can see that the code doesn't quite work when the customer made multiple purchases on the same date. The chapter presents a couple ways of correcting this.
+
+Here are a couple of ways of finding the customers who only made one purchase in March 2020. The chapter does this slightly differently.
+
+With subqueries:
+
+```{sql connection=con}
+SELECT * 
+FROM (
+  SELECT customer_id,
+           COUNT(market_date) AS num_purchases
+  FROM customer_purchases
+  WHERE EXTRACT(MONTH FROM market_date) = 3 AND
+        EXTRACT(YEAR FROM market_date) = 2020
+  GROUP BY customer_id
+  ORDER BY customer_id
+) AS x
+WHERE x.num_purchases = 1
+```
+With the HAVING clause:
+
+```{sql connection=con}
+  SELECT customer_id,
+           COUNT(market_date) AS num_purchases
+  FROM customer_purchases
+  WHERE EXTRACT(MONTH FROM market_date) = 3 AND
+        EXTRACT(YEAR FROM market_date) = 2020
+  GROUP BY customer_id
+  HAVING COUNT(market_date) =1
+  ORDER BY customer_id
+```
 
 ## Exercises
 
@@ -26,13 +161,61 @@ knitr::opts_knit$set(sql.max.print = NA)
 
 #### Question {-}
 
+> Get the customer_id , month, and year (in separate columns) of every purchase in the farmers_market.customer_purchases table.
 
 #### Answer {-}
 
+```{sql connection=con}
+  SELECT  customer_id, market_date,
+           EXTRACT(MONTH FROM market_date) AS month,
+           EXTRACT(YEAR FROM market_date) AS year
+  FROM customer_purchases
+  ORDER BY market_date, transaction_time
+  LIMIT 5
+```
+
+
+### Ex. 2 {-}
+
+#### Question {-}
+
+> Write a query that filters to purchases made in the past two weeks, returns the earliest market_date in that range as a field called sales_since_date , and a sum of the sales ( quantity * cost_to_customer_per_qty ) during that date range.
+
+#### Answer {-}
+
+There are no purchases in the database from the last two weeks. Otherwise would use CURDATE in place of '2020-10-10'.
+
+```{sql connection=con}
+SELECT MIN(market_date) AS sales_since_date,
+        SUM(quantity * cost_to_customer_per_qty) AS sum_of_sales
+FROM customer_purchases
+WHERE DATEDIFF('2020-10-10', market_date) < 14
+```
+
+### Ex. 3 {-}
+
+#### Question {-}
+
+> In MySQL, there is a DAYNAME() function that returns the full name of the day of the week on which a date occurs. Query the Farmer's Market database market_date_info table, return the market_date , the market_day , and your calculated day of the week name that each market_date occurred on. 
+Create a calculated column using a CASE statement that indicates whether the recorded day in the database differs from your calculated day of the week. This is an example of a quality control query that could be used to check manually entered data for correctness.
+
+#### Answer {-}
+
+```{sql connection=con}
+SELECT market_date, market_day, DAYNAME(market_date) AS calc_market_day,
+        CASE 
+          WHEN market_day = DAYNAME(market_date)
+          THEN 1
+          ELSE 0 
+        END AS check_match
+FROM market_date_info
+HAVING check_match = 1
+LIMIT 5
+```
 
 ## Further Reading {-}
 
-
+[MySQL 8.0 Date and time functions documentation.](dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html)
 
 ```{r echo = FALSE}
 # Disconnecting the database

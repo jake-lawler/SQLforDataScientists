@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
+  <title>Chapter 9 Exploratory Data Analysis with SQL | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
   <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta property="og:title" content="Chapter 9 Exploratory Data Analysis with SQL | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="My Notes on ‘SQL for Data Scientists’." />
   <meta name="github-repo" content="jake-lawler/SQLforDataScientists" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
+  <meta name="twitter:title" content="Chapter 9 Exploratory Data Analysis with SQL | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   
   <meta name="twitter:description" content="My Notes on ‘SQL for Data Scientists’." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="date_time.html"/>
 
-<link rel="next" href="data_sources.html"/>
 <script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -245,44 +245,103 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</h1>
-<p class="author"><em>Jake Lawler</em></p>
-<p class="date"><em>2022-04-03</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>These are my notes on ‘SQL for Data Scientists’ by Renée M. P. Teate.</p>
-<p>I’ll make use of the <a href="https://dev.mysql.com/doc/refman/8.0/en/">MySQL 8.0 Reference Manual</a> throughout my read-through.</p>
-<p>Here are the sources I referred to to get MySQL up-and-running from within R Markdown:</p>
+<div id="exploratory_analysis" class="section level1" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Exploratory Data Analysis with SQL</h1>
+<div id="chapter-notes-8" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Chapter Notes</h2>
+<p>This chapter doesn’t introduce too much coding concepts. A lot of the example code in this chapter fits straightforwardly into what we’ve already seen. The purpose of the chapter is instead to suggest approaches to exploring a new data set.</p>
+<p>The chapter provides examples of the kind of questions we might want to ask when we’re first getting acquainted with a new database:</p>
+<blockquote>
 <ul>
-<li><p>The answer from ‘Harley’ <a href="https://stackoverflow.com/questions/50544230/connecting-to-mysql-from-r">here</a> on connecting to MySQL.</p></li>
-<li><p>The <a href="https://rmariadb.r-dbi.org/reference/index.html">reference page</a> for RMariaDB.</p></li>
-<li><p>The information on including SQL in R Markdown from Yihui Xie’s <a href="https://bookdown.org/yihui/rmarkdown/language-engines.html#sql">R Markdown book</a>.</p></li>
+<li>How large are the tables, and how far back in time does the data go?</li>
+<li>What kind of information is available about each product and each purchase?</li>
+<li>What is the granularity of each of these tables; what makes a row unique?</li>
+<li>Since we’ll be looking at trends over time, what kind of date and time dimensions are available, and how do the different values look when summarized over time?</li>
+<li>How is the data in each table related to the other tables? How might we join them together to summarize the details for reporting?</li>
 </ul>
-<p>Here’s an example of the code I’m using to connect to the book’s example database, I’ll hide this in the future chapters:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting up </span></span>
-<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Connect to the book&#39;s example MySQL database</span></span>
-<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RMariaDB<span class="sc">::</span><span class="fu">MariaDB</span>(), </span>
-<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">dbname =</span> <span class="st">&quot;farmers_market&quot;</span>, </span>
-<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">host =</span> <span class="st">&quot;localhost&quot;</span>, </span>
-<span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">port =</span> <span class="dv">3306</span>,</span>
-<span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">user =</span> <span class="st">&quot;root&quot;</span>,</span>
-<span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">password =</span> keyring<span class="sc">::</span><span class="fu">key_get</span>(<span class="st">&quot;mysql&quot;</span>, <span class="st">&quot;root&quot;</span>))</span>
-<span id="cb1-11"><a href="index.html#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="index.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># No limit on the number of records to be displayed</span></span>
-<span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(<span class="at">sql.max.print =</span> <span class="cn">NA</span>)</span></code></pre></div>
-<p>I’ve used the keyring package to store my database password. The password is initially set by running code like the following in the console:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_set_with_value</span>(<span class="st">&quot;mysql&quot;</span>, <span class="at">username =</span> <span class="st">&quot;root&quot;</span>, <span class="at">password =</span> <span class="st">&quot;password123&quot;</span>)</span></code></pre></div>
-<p>And then running the following code will return the value “password123”:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a>keyring<span class="sc">::</span><span class="fu">key_get</span>(<span class="st">&quot;mysql&quot;</span>, <span class="st">&quot;root&quot;</span>)</span></code></pre></div>
-<p>You can then run queries by using R Markdown’s support for SQL code snippets:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> farmers_market.product</span></code></pre></div>
+</blockquote>
+<p>MySQL has a statement called DESCRIBE that lists columns, their data types, and some other information. Not all database schemes have something like this however:</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb90-1"><a href="exploratory_analysis.html#cb90-1" aria-hidden="true" tabindex="-1"></a>DESCRIBE customer_purchases</span></code></pre></div>
 <div class="knitsql-table">
 <table>
-<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>Displaying records 1 - 10</caption>
+<caption><span id="tab:unnamed-chunk-2">Table 2.1: </span>7 records</caption>
+<thead>
+<tr class="header">
+<th align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Null</th>
+<th align="left">Key</th>
+<th align="left">Default</th>
+<th align="left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">product_id</td>
+<td align="left">int</td>
+<td align="left">NO</td>
+<td align="left">PRI</td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">vendor_id</td>
+<td align="left">int</td>
+<td align="left">NO</td>
+<td align="left">PRI</td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">market_date</td>
+<td align="left">date</td>
+<td align="left">NO</td>
+<td align="left">PRI</td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">customer_id</td>
+<td align="left">int</td>
+<td align="left">NO</td>
+<td align="left">PRI</td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">quantity</td>
+<td align="left">decimal(16,2)</td>
+<td align="left">YES</td>
+<td align="left"></td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">cost_to_customer_per_qty</td>
+<td align="left">decimal(16,2)</td>
+<td align="left">YES</td>
+<td align="left"></td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">transaction_time</td>
+<td align="left">time</td>
+<td align="left">NO</td>
+<td align="left">PRI</td>
+<td align="left">NA</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A good start in the absence of DESCRIBE is just to SELECT all columns from a table:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb91-1"><a href="exploratory_analysis.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb91-2"><a href="exploratory_analysis.html#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product</span>
+<span id="cb91-3"><a href="exploratory_analysis.html#cb91-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-3">Table 2.2: </span>10 records</caption>
 <colgroup>
 <col width="12%" />
 <col width="30%" />
@@ -373,18 +432,278 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
-<p>Then disconnecting the database at the end of each chapter:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disconnecting the database</span></span>
-<span id="cb5-2"><a href="index.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<p>We want to identify the primary key. It looks like it might be product_id, how can we check that each row is unique?</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb92-1"><a href="exploratory_analysis.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id, <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
+<span id="cb92-2"><a href="exploratory_analysis.html#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product</span>
+<span id="cb92-3"><a href="exploratory_analysis.html#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> product_id</span>
+<span id="cb92-4"><a href="exploratory_analysis.html#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="op">&gt;</span><span class="dv">1</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 2.3: </span>0 records</caption>
+<thead>
+<tr class="header">
+<th align="right">product_id</th>
+<th align="right">COUNT(*)</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+<p>No guarantee that this means product_id is the primary key, but we can at least tell that currently each row is assigned a unique product_id.</p>
+<p>SELECT DISTINCT can be used to see the range of values a columns takes in a table.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb93-1"><a href="exploratory_analysis.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> product_qty_type</span>
+<span id="cb93-2"><a href="exploratory_analysis.html#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> product</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 0.1: </span>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">product_qty_type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">lbs</td>
+</tr>
+<tr class="even">
+<td align="left">unit</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can use MIN and MAX to find the range of a numeric variable.</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb94-1"><a href="exploratory_analysis.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">MIN</span>(market_date), <span class="fu">MAX</span>(market_date)</span>
+<span id="cb94-2"><a href="exploratory_analysis.html#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 2.4: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="left">MIN(market_date)</th>
+<th align="left">MAX(market_date)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="left">2020-10-10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The code below is used as an example of checking for changes in the data over time:</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb95-1"><a href="exploratory_analysis.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">EXTRACT</span>(<span class="dt">YEAR</span> <span class="kw">FROM</span> market_date) <span class="kw">AS</span> market_year, </span>
+<span id="cb95-2"><a href="exploratory_analysis.html#cb95-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">EXTRACT</span>(<span class="dt">MONTH</span> <span class="kw">FROM</span> market_date) <span class="kw">AS</span> market_month, </span>
+<span id="cb95-3"><a href="exploratory_analysis.html#cb95-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> vendor_id) <span class="kw">AS</span> vendors_with_inventory </span>
+<span id="cb95-4"><a href="exploratory_analysis.html#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> vendor_inventory </span>
+<span id="cb95-5"><a href="exploratory_analysis.html#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">EXTRACT</span>(<span class="dt">YEAR</span> <span class="kw">FROM</span> market_date), <span class="fu">EXTRACT</span>(<span class="dt">MONTH</span> <span class="kw">FROM</span> market_date)</span>
+<span id="cb95-6"><a href="exploratory_analysis.html#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">EXTRACT</span>(<span class="dt">YEAR</span> <span class="kw">FROM</span> market_date), <span class="fu">EXTRACT</span>(<span class="dt">MONTH</span> <span class="kw">FROM</span> market_date)</span>
+<span id="cb95-7"><a href="exploratory_analysis.html#cb95-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 2.5: </span>10 records</caption>
+<thead>
+<tr class="header">
+<th align="right">market_year</th>
+<th align="right">market_month</th>
+<th align="right">vendors_with_inventory</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2019</td>
+<td align="right">4</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">5</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">2019</td>
+<td align="right">6</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">7</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">2019</td>
+<td align="right">8</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">9</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">2019</td>
+<td align="right">10</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">11</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">2019</td>
+<td align="right">12</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">2020</td>
+<td align="right">3</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>I won’t include more examples from the chapter, but it does contain a lot of useful examples for EDA.</p>
+</div>
+<div id="exercises-8" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Exercises</h2>
+<div id="ex.-1-8" class="section level3 unnumbered">
+<h3>Ex. 1</h3>
+<div id="question-23" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>In the chapter, it was suggested that we should see if the customer_purchases data was collected for the same time frame as the vendor_inventory table. Write a query that gets the earliest and latest dates in the customer_purchases table.</p>
+</blockquote>
+</div>
+<div id="answer-23" class="section level4 unnumbered">
+<h4>Answer</h4>
+<div class="sourceCode" id="cb96"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb96-1"><a href="exploratory_analysis.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">MIN</span>(market_date), <span class="fu">MAX</span>(market_date)</span>
+<span id="cb96-2"><a href="exploratory_analysis.html#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-8">Table 2.6: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="left">MIN(market_date)</th>
+<th align="left">MAX(market_date)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2019-04-03</td>
+<td align="left">2020-10-10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The same range as for vendor_inventory.</p>
+</div>
+</div>
+<div id="ex.-2-8" class="section level3 unnumbered">
+<h3>Ex. 2</h3>
+<div id="question-24" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>There is a MySQL function DAYNAME() that returns the name of the day of the week for a date. Using the DAYNAME and EXTRACT functions on the customer_purchases table, select and group by the weekday and hour of the day, and count the distinct number of customers during each hour of the Wednesday and Saturday markets. See Chapters 6, “Aggregating Results for Analysis,” and 8, “Date and Time Functions,” for information on the COUNT DISTINCT and EXTRACT functions.</p>
+</blockquote>
+</div>
+<div id="answer-24" class="section level4 unnumbered">
+<h4>Answer</h4>
+<div class="sourceCode" id="cb97"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb97-1"><a href="exploratory_analysis.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> DAYNAME(market_date) <span class="kw">AS</span> <span class="dt">day</span>, <span class="fu">EXTRACT</span>(<span class="kw">HOUR</span> <span class="kw">FROM</span> transaction_time) <span class="kw">AS</span> <span class="kw">hour</span>,</span>
+<span id="cb97-2"><a href="exploratory_analysis.html#cb97-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> customer_id) <span class="kw">AS</span> number_customers</span>
+<span id="cb97-3"><a href="exploratory_analysis.html#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span>
+<span id="cb97-4"><a href="exploratory_analysis.html#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dt">day</span>, <span class="kw">hour</span></span>
+<span id="cb97-5"><a href="exploratory_analysis.html#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dt">day</span>, <span class="kw">hour</span></span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 3.1: </span>9 records</caption>
+<thead>
+<tr class="header">
+<th align="left">day</th>
+<th align="right">hour</th>
+<th align="right">number_customers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Saturday</td>
+<td align="right">8</td>
+<td align="right">24</td>
+</tr>
+<tr class="even">
+<td align="left">Saturday</td>
+<td align="right">9</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Saturday</td>
+<td align="right">10</td>
+<td align="right">26</td>
+</tr>
+<tr class="even">
+<td align="left">Saturday</td>
+<td align="right">11</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Saturday</td>
+<td align="right">12</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">Saturday</td>
+<td align="right">13</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Wednesday</td>
+<td align="right">16</td>
+<td align="right">26</td>
+</tr>
+<tr class="even">
+<td align="left">Wednesday</td>
+<td align="right">17</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">Wednesday</td>
+<td align="right">18</td>
+<td align="right">26</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="ex.-3-7" class="section level3 unnumbered">
+<h3>Ex. 3</h3>
+<div id="question-25" class="section level4 unnumbered">
+<h4>Question</h4>
+<blockquote>
+<p>What other questions haven’t we yet asked about the data in these tables that you would be curious about? Write two more queries further exploring or summarizing the data in the product , vendor_inventory , or customer_purchases tables.</p>
+</blockquote>
+</div>
+<div id="answer-25" class="section level4 unnumbered">
+<h4>Answer</h4>
+</div>
+</div>
+</div>
+<div id="further-reading-1" class="section level2 unnumbered">
+<h2>Further Reading</h2>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="date_time.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="data_sources.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -415,7 +734,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/09-exploratory_analysis.Rmd",
 "text": "Edit"
 },
 "history": {

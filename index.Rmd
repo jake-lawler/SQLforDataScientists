@@ -25,6 +25,7 @@ serve_book(dir = ".", output_dir = "_book", preview = TRUE, in_session = TRUE, q
 
 These are my notes on 'SQL for Data Scientists' by Renée M. P. Teate.
 
+I'll make use of the [MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/) throughout my read-through.
 
 Here are the sources I referred to to get MySQL up-and-running from within R Markdown:
 

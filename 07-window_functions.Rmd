@@ -21,7 +21,7 @@ knitr::opts_knit$set(sql.max.print = NA)
 
 Like aggregates, windows functions can operate across multiple rows. However the records don't have to be grouped in the output. They can return group-level information alongside each row.
 
-As an example, here's the aggregation we've seen before:
+As an example, here's the kind of aggregation we've seen before:
 
 ```{sql connection=con}
 SELECT vendor_id, MAX(original_price) AS highest_price
