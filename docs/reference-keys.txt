@@ -41,3 +41,6 @@ exercises-7
 exploratory_analysis
 chapter-notes-8
 exercises-8
+building_datasets
+chapter-notes-9
+exercises-9

@@ -1,0 +1,136 @@
+# Building SQL Datasets for Analytical Reporting {#building_datasets}
+
+```{r echo = FALSE}
+# Setting up 
+library(DBI)
+
+# Connect to the book's example MySQL database
+con <- dbConnect(RMariaDB::MariaDB(), 
+             dbname = "farmers_market", 
+             host = "localhost", 
+             port = 3306,
+             user = "root",
+             password = keyring::key_get("mysql", "root"))
+
+# No limit on the number of records to be displayed
+knitr::opts_knit$set(sql.max.print = NA)
+```
+
+
+## Chapter Notes
+
+This chapter contains some helpful advice about creating a data sets to answer questions of interest, particularly when you want that data set to be reusable. Here are some tips:
+
+* Consider the level of granularity required to answer the business question - we don't want to have to aggregate each time we query the data set, but we also don't want to have to create ad hoc queries at a lower level of granularity too often. What is the lowest level of granularity that is going to regularly be useful to answer the questions your data set is built for?
+* Use human readable columns where possible (e.g. vendor name instead of ID)
+* Include useful dimensions for grouping and slicing (e.g. product category)
+* The first question you are asked will likely not be the only one. Try to anticipate follow-up questions and build your data set to be able to answer them.
+
+The chapter goes on to introduce two new ways of storing queries and the results of queries for reuse: common table expressions (CTEs), and views. Another approach, creating new database tables, will be introduced in a later chapter.
+
+CTEs or WITH clauses allow you to create an alias for a query, which you can then reference in other queries in the same way you would a table.
+
+The way that this works is that you write a WITH clause, assigning one or more queries an alias, and then below the WITH clause you can start your SELECT query and reference the alias(es) like you would a table. In the WITH clause, each query can reference the alias of any previous queries in the clause. Here's the syntax:
+
+```{sql connection=con, eval = FALSE}
+
+WITH [query_alias] AS -- first query alias
+( 
+        [query] -- first query definition
+        ),
+        
+    [query_2_alias] AS -- second query alias 
+        ( 
+        [query_2] -- second query definition 
+) 
+
+SELECT [column list] -- here's your regular SELECT query
+FROM [query_alias] -- you can reference the aliases just defined
+
+```
+
+Here's the example from the chapter:
+
+```{sql connection=con}
+WITH sales_by_day_vendor AS (
+  SELECT cp.market_date, md.market_day, md.market_week, md.market_year, 
+          cp.vendor_id, v.vendor_name, v.vendor_type, 
+          ROUND(SUM(cp.quantity * cp.cost_to_customer_per_qty),2) AS sales 
+  FROM farmers_market.customer_purchases AS cp 
+  LEFT JOIN farmers_market.market_date_info AS md 
+      ON cp.market_date = md.market_date 
+  LEFT JOIN farmers_market.vendor AS v 
+      ON cp.vendor_id = v.vendor_id 
+  GROUP BY cp.market_date, cp.vendor_id 
+  ORDER BY cp.market_date, cp.vendor_id
+) 
+
+
+SELECT s.market_year, s.market_week, 
+        SUM(s.sales) AS weekly_sales
+FROM sales_by_day_vendor AS s        -- referencing CTE defined above
+GROUP BY s.market_year, s.market_week
+LIMIT 10
+```
+
+CTEs use cleaner-looking code and so are easier to understand than a sub-query.
+
+Another approach is to create a database *view*. Here's the chapter:
+
+> A view is treated just like a table in SQL, the only difference being that it has run when it's referenced to dynamically generate a result set (where a table stores the data instead of storing the query), so queries that reference views can take longer to run than
+queries that reference tables.
+
+You'll need database permissions to create a view. If you have the permissions you can create a view by preceding your SELECT statement with
+
+```{sql connection=con, eval = FALSE}
+CREATE VIEW [schema_name].[view_name] AS
+```
+
+Here's an example from the chapter:
+
+```{sql connection=con, eval = FALSE}
+CREATE VIEW farmers_market.vw_sales_by_day_vendor AS 
+  SELECT cp.market_date, md.market_day, md.market_week, md.market_year, 
+          cp.vendor_id, v.vendor_name, v.vendor_type, 
+          ROUND(SUM(cp.quantity * cp.cost_to_customer_per_qty),2) AS sales
+  FROM farmers_market.customer_purchases AS cp 
+  LEFT JOIN farmers_market.market_date_info AS md 
+    ON cp.market_date = md.market_date 
+  LEFT JOIN farmers_market.vendor AS v 
+    ON cp.vendor_id = v.vendor_id
+GROUP BY cp.market_date, cp.vendor_id
+ORDER BY cp.market_date, cp.vendor_id
+```
+
+Here the view has been named with a preceding "vw_" to make it clear that this a view when writing queries that reference it.
+
+You can then use that stored view like you would a table:
+
+```{sql connection=con}
+SELECT * 
+FROM farmers_market.vw_sales_by_day_vendor AS s -- referencing created view
+WHERE s.market_date BETWEEN '2020-04-01' AND '2020-04-30'
+      AND s.vendor_id = 7
+ORDER BY market_date
+```
+
+Also remember that the view is dynamic - it updates each time it is run and so will reflect any changes in the database.
+
+
+## Exercises
+
+### Ex. 1 {-}
+
+#### Question {-}
+
+
+#### Answer {-}
+
+## Further Reading {-}
+
+
+
+```{r echo = FALSE}
+# Disconnecting the database
+dbDisconnect(con)
+```
