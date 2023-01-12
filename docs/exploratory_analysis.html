@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 9 Exploratory Data Analysis with SQL | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate</title>
   <meta name="description" content="My Notes on ‘SQL for Data Scientists’." />
-  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 9 Exploratory Data Analysis with SQL | Notes on ‘SQL for Data Scientists’ by Renée M. P. Teate" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-04-06" />
+<meta name="date" content="2023-01-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,6 @@
   
 <link rel="prev" href="date_time.html"/>
 <link rel="next" href="building_datasets.html"/>
-<script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -50,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -92,7 +92,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -105,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -136,6 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="data_sources.html"><a href="data_sources.html"><i class="fa fa-check"></i><b>1</b> Data Sources</a>
 <ul>
+<li class="chapter" data-level="" data-path="data_sources.html"><a href="data_sources.html#learning-outcomes"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="1.1" data-path="data_sources.html"><a href="data_sources.html#chapter-notes"><i class="fa fa-check"></i><b>1.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="1.2" data-path="data_sources.html"><a href="data_sources.html#exercises"><i class="fa fa-check"></i><b>1.2</b> Exercises</a>
 <ul>
@@ -145,6 +146,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2" data-path="select.html"><a href="select.html"><i class="fa fa-check"></i><b>2</b> The SELECT Statement</a>
 <ul>
+<li class="chapter" data-level="" data-path="select.html"><a href="select.html#learning-outcomes-1"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="2.1" data-path="select.html"><a href="select.html#chapter-notes-1"><i class="fa fa-check"></i><b>2.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="2.2" data-path="select.html"><a href="select.html#exercises-1"><i class="fa fa-check"></i><b>2.2</b> Exercises</a>
 <ul>
@@ -155,6 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="where.html"><a href="where.html"><i class="fa fa-check"></i><b>3</b> The WHERE Clause</a>
 <ul>
+<li class="chapter" data-level="" data-path="where.html"><a href="where.html#learning-outcomes-2"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="3.1" data-path="where.html"><a href="where.html#chapter-notes-2"><i class="fa fa-check"></i><b>3.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="3.2" data-path="where.html"><a href="where.html#exercises-2"><i class="fa fa-check"></i><b>3.2</b> Exercises</a>
 <ul>
@@ -165,6 +168,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="case.html"><a href="case.html"><i class="fa fa-check"></i><b>4</b> CASE Statements</a>
 <ul>
+<li class="chapter" data-level="" data-path="case.html"><a href="case.html#learning-outcomes-3"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="4.1" data-path="case.html"><a href="case.html#chapter-notes-3"><i class="fa fa-check"></i><b>4.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="4.2" data-path="case.html"><a href="case.html#exercises-3"><i class="fa fa-check"></i><b>4.2</b> Exercises</a>
 <ul>
@@ -175,6 +179,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="sql_joins.html"><a href="sql_joins.html"><i class="fa fa-check"></i><b>5</b> SQL JOINs</a>
 <ul>
+<li class="chapter" data-level="" data-path="sql_joins.html"><a href="sql_joins.html#learning-outcomes-4"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="5.1" data-path="sql_joins.html"><a href="sql_joins.html#chapter-notes-4"><i class="fa fa-check"></i><b>5.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="5.2" data-path="sql_joins.html"><a href="sql_joins.html#exercises-4"><i class="fa fa-check"></i><b>5.2</b> Exercises</a>
 <ul>
@@ -185,6 +190,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="aggregating.html"><a href="aggregating.html"><i class="fa fa-check"></i><b>6</b> Aggregating Results for Analysis</a>
 <ul>
+<li class="chapter" data-level="" data-path="aggregating.html"><a href="aggregating.html#learning-outcomes-5"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="6.1" data-path="aggregating.html"><a href="aggregating.html#chapter-notes-5"><i class="fa fa-check"></i><b>6.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="6.2" data-path="aggregating.html"><a href="aggregating.html#exercises-5"><i class="fa fa-check"></i><b>6.2</b> Exercises</a>
 <ul>
@@ -195,6 +201,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7" data-path="window_functions.html"><a href="window_functions.html"><i class="fa fa-check"></i><b>7</b> Window Functions and Subqueries</a>
 <ul>
+<li class="chapter" data-level="" data-path="window_functions.html"><a href="window_functions.html#learning-outcomes-6"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="7.1" data-path="window_functions.html"><a href="window_functions.html#chapter-notes-6"><i class="fa fa-check"></i><b>7.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="7.2" data-path="window_functions.html"><a href="window_functions.html#exercises-6"><i class="fa fa-check"></i><b>7.2</b> Exercises</a>
 <ul>
@@ -205,6 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8" data-path="date_time.html"><a href="date_time.html"><i class="fa fa-check"></i><b>8</b> Date and Time Functions</a>
 <ul>
+<li class="chapter" data-level="" data-path="date_time.html"><a href="date_time.html#learning-outcomes-7"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="8.1" data-path="date_time.html"><a href="date_time.html#chapter-notes-7"><i class="fa fa-check"></i><b>8.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="8.2" data-path="date_time.html"><a href="date_time.html#exercises-7"><i class="fa fa-check"></i><b>8.2</b> Exercises</a>
 <ul>
@@ -216,6 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="9" data-path="exploratory_analysis.html"><a href="exploratory_analysis.html"><i class="fa fa-check"></i><b>9</b> Exploratory Data Analysis with SQL</a>
 <ul>
+<li class="chapter" data-level="" data-path="exploratory_analysis.html"><a href="exploratory_analysis.html#learning-outcomes-8"><i class="fa fa-check"></i>Learning Outcomes</a></li>
 <li class="chapter" data-level="9.1" data-path="exploratory_analysis.html"><a href="exploratory_analysis.html#chapter-notes-8"><i class="fa fa-check"></i><b>9.1</b> Chapter Notes</a></li>
 <li class="chapter" data-level="9.2" data-path="exploratory_analysis.html"><a href="exploratory_analysis.html#exercises-8"><i class="fa fa-check"></i><b>9.2</b> Exercises</a>
 <ul>
@@ -254,11 +263,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="exploratory_analysis" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Exploratory Data Analysis with SQL</h1>
-<div id="chapter-notes-8" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Chapter Notes</h2>
-<p>This chapter doesn’t introduce too much coding concepts. A lot of the example code in this chapter fits straightforwardly into what we’ve already seen. The purpose of the chapter is instead to suggest approaches to exploring a new data set.</p>
+<div id="exploratory_analysis" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Exploratory Data Analysis with SQL<a href="exploratory_analysis.html#exploratory_analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="learning-outcomes-8" class="section level2 unnumbered hasAnchor">
+<h2>Learning Outcomes<a href="exploratory_analysis.html#learning-outcomes-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>What are some questions we might like to ask when becoming familiar with a new database?</li>
+<li>What does the DESCRIBE function do in MySQL?</li>
+<li>If we don’t have the DESCRIBE functions, what are some operations we might like to perform on our new database?</li>
+</ul>
+</div>
+<div id="chapter-notes-8" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Chapter Notes<a href="exploratory_analysis.html#chapter-notes-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This chapter doesn’t introduce too many coding concepts. A lot of the example code in this chapter fits straightforwardly into what we’ve already seen. The purpose of the chapter is instead to suggest approaches to exploring a new data set.</p>
 <p>The chapter provides examples of the kind of questions we might want to ask when we’re first getting acquainted with a new database:</p>
 <blockquote>
 <ul>
@@ -578,18 +595,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>I won’t include more examples from the chapter, but it does contain a lot of useful examples for EDA.</p>
 </div>
-<div id="exercises-8" class="section level2" number="9.2">
-<h2><span class="header-section-number">9.2</span> Exercises</h2>
-<div id="ex.-1-8" class="section level3 unnumbered">
-<h3>Ex. 1</h3>
-<div id="question-23" class="section level4 unnumbered">
-<h4>Question</h4>
+<div id="exercises-8" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Exercises<a href="exploratory_analysis.html#exercises-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="ex.-1-8" class="section level3 unnumbered hasAnchor">
+<h3>Ex. 1<a href="exploratory_analysis.html#ex.-1-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="question-23" class="section level4 unnumbered hasAnchor">
+<h4>Question<a href="exploratory_analysis.html#question-23" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <blockquote>
 <p>In the chapter, it was suggested that we should see if the customer_purchases data was collected for the same time frame as the vendor_inventory table. Write a query that gets the earliest and latest dates in the customer_purchases table.</p>
 </blockquote>
 </div>
-<div id="answer-23" class="section level4 unnumbered">
-<h4>Answer</h4>
+<div id="answer-23" class="section level4 unnumbered hasAnchor">
+<h4>Answer<a href="exploratory_analysis.html#answer-23" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb96"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb96-1"><a href="exploratory_analysis.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">MIN</span>(market_date), <span class="fu">MAX</span>(market_date)</span>
 <span id="cb96-2"><a href="exploratory_analysis.html#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span></code></pre></div>
 <div class="knitsql-table">
@@ -612,16 +629,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The same range as for vendor_inventory.</p>
 </div>
 </div>
-<div id="ex.-2-8" class="section level3 unnumbered">
-<h3>Ex. 2</h3>
-<div id="question-24" class="section level4 unnumbered">
-<h4>Question</h4>
+<div id="ex.-2-8" class="section level3 unnumbered hasAnchor">
+<h3>Ex. 2<a href="exploratory_analysis.html#ex.-2-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="question-24" class="section level4 unnumbered hasAnchor">
+<h4>Question<a href="exploratory_analysis.html#question-24" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <blockquote>
 <p>There is a MySQL function DAYNAME() that returns the name of the day of the week for a date. Using the DAYNAME and EXTRACT functions on the customer_purchases table, select and group by the weekday and hour of the day, and count the distinct number of customers during each hour of the Wednesday and Saturday markets. See Chapters 6, “Aggregating Results for Analysis,” and 8, “Date and Time Functions,” for information on the COUNT DISTINCT and EXTRACT functions.</p>
 </blockquote>
 </div>
-<div id="answer-24" class="section level4 unnumbered">
-<h4>Answer</h4>
+<div id="answer-24" class="section level4 unnumbered hasAnchor">
+<h4>Answer<a href="exploratory_analysis.html#answer-24" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb97"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb97-1"><a href="exploratory_analysis.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> DAYNAME(market_date) <span class="kw">AS</span> <span class="dt">day</span>, <span class="fu">EXTRACT</span>(<span class="kw">HOUR</span> <span class="kw">FROM</span> transaction_time) <span class="kw">AS</span> <span class="kw">hour</span>,</span>
 <span id="cb97-2"><a href="exploratory_analysis.html#cb97-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> customer_id) <span class="kw">AS</span> number_customers</span>
 <span id="cb97-3"><a href="exploratory_analysis.html#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> customer_purchases</span>
@@ -688,21 +705,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div id="ex.-3-7" class="section level3 unnumbered">
-<h3>Ex. 3</h3>
-<div id="question-25" class="section level4 unnumbered">
-<h4>Question</h4>
+<div id="ex.-3-7" class="section level3 unnumbered hasAnchor">
+<h3>Ex. 3<a href="exploratory_analysis.html#ex.-3-7" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="question-25" class="section level4 unnumbered hasAnchor">
+<h4>Question<a href="exploratory_analysis.html#question-25" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <blockquote>
 <p>What other questions haven’t we yet asked about the data in these tables that you would be curious about? Write two more queries further exploring or summarizing the data in the product , vendor_inventory , or customer_purchases tables.</p>
 </blockquote>
 </div>
-<div id="answer-25" class="section level4 unnumbered">
-<h4>Answer</h4>
+<div id="answer-25" class="section level4 unnumbered hasAnchor">
+<h4>Answer<a href="exploratory_analysis.html#answer-25" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 </div>
 </div>
 </div>
-<div id="further-reading-1" class="section level2 unnumbered">
-<h2>Further Reading</h2>
+<div id="further-reading-1" class="section level2 unnumbered hasAnchor">
+<h2>Further Reading<a href="exploratory_analysis.html#further-reading-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
 </div>
 </div>

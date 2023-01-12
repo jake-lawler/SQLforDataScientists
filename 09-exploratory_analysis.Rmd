@@ -17,9 +17,15 @@ knitr::opts_knit$set(sql.max.print = NA)
 ```
 
 
+## Learning Outcomes {-}
+
+* What are some questions we might like to ask when becoming familiar with a new database?
+* What does the DESCRIBE function do in MySQL?
+* If we don't have the DESCRIBE functions, what are some operations we might like to perform on our new database?
+
 ## Chapter Notes
 
-This chapter doesn't introduce too much coding concepts. A lot of the example code in this chapter fits straightforwardly into what we've already seen. The purpose of the chapter is instead to suggest approaches to exploring a new data set.   
+This chapter doesn't introduce too many coding concepts. A lot of the example code in this chapter fits straightforwardly into what we've already seen. The purpose of the chapter is instead to suggest approaches to exploring a new data set.   
 
 The chapter provides examples of the kind of questions we might want to ask when we're first getting acquainted with a new database:
 
